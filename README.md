@@ -1,7 +1,8 @@
 # MạchKit – Website bán linh kiện điện tử theo bộ thực hành
 
 **Sinh viên:** Vũ Đức Huy · **Lớp:** DK25TTC5 · **MSSV:** 170125378  
-**Liên hệ theo yêu cầu của lớp:** Email: [tự điền] · Điện thoại: [tự điền; tránh công khai khi chưa thống nhất với giảng viên].
+**Liên hệ theo yêu cầu của lớp:** Email: huyvd290197@tvu-onschool.edu.vn .
+**số Điện thoại** SĐT: 0935075821.
 
 ## Bài toán
 Người mua nhập số bộ thực hành cần chuẩn bị. Website tính số lượng của từng linh kiện, dự toán tiền và chỉ ra món nào còn thiếu. Mã khởi đầu chỉ dùng dữ liệu mẫu, chưa có giỏ hàng, đặt hàng hay kết nối cơ sở dữ liệu.
