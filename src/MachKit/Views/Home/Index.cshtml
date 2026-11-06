@@ -1,0 +1,50 @@
+@model MachKit.Models.DuToanBo
+@using System.Globalization
+@{
+    Layout = null;
+    string Tien(decimal soTien) => soTien.ToString("N0", CultureInfo.GetCultureInfo("vi-VN")) + " đ";
+}
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dự toán bộ thực hành | MạchKit</title>
+    <link rel="stylesheet" href="@Url.Content("~/css/site.css")" />
+</head>
+<body>
+<header><div class="wrap bar"><strong>MạchKit</strong><span>Xưởng thực hành điện tử</span></div></header>
+<main class="wrap">
+    <p class="eyebrow">BỘ THỰC HÀNH / MK-01</p>
+    <h1>Đèn LED đôi trên breadboard</h1>
+    <p class="intro">Bạn muốn chuẩn bị bao nhiêu bộ? MạchKit sẽ tính số linh kiện cần mua và chỉ ra món còn thiếu.</p>
+    <section class="controls" aria-label="Chọn số bộ">
+        <form method="get" action="@Url.Action("Index", "Home")">
+            <label for="soBo">Số bộ cần chuẩn bị</label>
+            <div class="fields"><input name="soBo" id="soBo" type="number" min="1" max="99" step="1" required value="@Model.GiaTriNhap" /><button type="submit">Tính linh kiện</button></div>
+        </form>
+        <div class="limit">Kho mẫu hiện đủ cho <strong>@Model.SoBoToiDa bộ</strong></div>
+    </section>
+    @if (Model.Loi is not null)
+    {
+        <p class="notice warn" role="alert">@Model.Loi</p>
+    }
+    else
+    {
+        <h2>Bảng linh kiện cần mua</h2>
+        <div class="scroll"><table>
+            <thead><tr><th scope="col">Linh kiện</th><th scope="col">Định mức / bộ</th><th scope="col">Cần mua</th><th scope="col">Còn kho</th><th scope="col">Kiểm tra</th><th scope="col">Đơn giá</th><th scope="col">Thành tiền</th></tr></thead>
+            <tbody>
+            @foreach (var d in Model.Dong)
+            {
+                <tr><th scope="row">@d.LinhKien.Ten<small>@d.LinhKien.Ma</small></th><td>@d.LinhKien.DinhMuc</td><td><strong>@d.Can</strong></td><td>@d.LinhKien.Ton</td><td class="@(d.Thieu > 0 ? "missing" : "enough")">@(d.Thieu > 0 ? $"Thiếu {d.Thieu}" : "Đủ")</td><td>@Tien(d.LinhKien.DonGia)</td><td>@Tien(d.ThanhTien)</td></tr>
+            }
+            </tbody>
+        </table></div>
+        <div class="total"><span>Tạm tính cho @Model.GiaTriNhap bộ</span><strong>@Tien(Model.TongTien)</strong></div>
+        <p class="notice @(Model.DuHang ? "ok" : "warn")" role="status">@(Model.DuHang ? "Đủ linh kiện cho số bộ đã chọn." : "Chưa đủ linh kiện. Hãy giảm số bộ hoặc xem dòng báo thiếu.")</p>
+    }
+    <p class="hint">Bản thực hành 01 · Giá và tồn kho là dữ liệu minh họa. Dự toán chưa bao gồm phí giao hàng, không tạo đơn và không giữ hàng.</p>
+</main>
+<footer class="wrap">Đồ án ASP.NET · Vũ Đức Huy · DK25TTC5 · 170125378</footer>
+</body></html>

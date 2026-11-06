@@ -1,0 +1,17 @@
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.suo
+*.zip
+*.mdf
+*.ldf
+*.bak
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+secrets.json
+*.pfx
+*.publishsettings
+Properties/PublishProfiles/
