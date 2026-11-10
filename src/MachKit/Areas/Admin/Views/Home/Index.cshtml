@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Quản trị MạchKit";
+}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div><h1 class="fw-bold mb-1">Khu quản trị MạchKit</h1><p class="text-muted mb-0">Quản lý dữ liệu của website.</p></div>
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Về trang chủ</a>
+    </div>
+    <div class="row g-3 mb-4">
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted">Linh kiện</div><div class="display-6 fw-bold">@ViewBag.SoLinhKien</div></div></div></div>
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted">Danh mục</div><div class="display-6 fw-bold">@ViewBag.SoDanhMuc</div></div></div></div>
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted">Thương hiệu</div><div class="display-6 fw-bold">@ViewBag.SoThuongHieu</div></div></div></div>
+        <div class="col-md-3"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted">Bộ thực hành</div><div class="display-6 fw-bold">@ViewBag.SoBo</div></div></div></div>
+    </div>
+    <div class="list-group shadow-sm">
+        <a asp-controller="LinhKien" asp-action="Index" class="list-group-item list-group-item-action">Quản lý linh kiện</a>
+        <a asp-controller="DanhMuc" asp-action="Index" class="list-group-item list-group-item-action">Quản lý danh mục</a>
+        <a asp-controller="ThuongHieu" asp-action="Index" class="list-group-item list-group-item-action">Quản lý thương hiệu</a>
+        <a asp-controller="BoThucHanh" asp-action="Index" class="list-group-item list-group-item-action">Quản lý bộ thực hành</a>
+    </div>
+</div>

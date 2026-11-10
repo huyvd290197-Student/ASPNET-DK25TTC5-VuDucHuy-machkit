@@ -1,0 +1,6 @@
+@model IEnumerable<DanhMuc>
+@{ ViewData["Title"] = "Danh mục"; }
+<div class="container py-5"><div class="d-flex justify-content-between mb-3"><h1>Danh mục</h1><a asp-action="Create" class="btn btn-primary">Thêm danh mục</a></div>
+<table class="table table-bordered bg-white"><thead><tr><th>Tên</th><th>Slug</th><th>Danh mục cha</th><th>Thứ tự</th><th></th></tr></thead><tbody>
+@foreach(var x in Model){<tr><td>@x.TenDanhMuc</td><td>@x.Slug</td><td>@x.DanhMucCha?.TenDanhMuc</td><td>@x.ThuTu</td><td><a asp-action="Edit" asp-route-id="@x.Id" class="btn btn-sm btn-outline-primary">Sửa</a></td></tr>}
+</tbody></table></div>

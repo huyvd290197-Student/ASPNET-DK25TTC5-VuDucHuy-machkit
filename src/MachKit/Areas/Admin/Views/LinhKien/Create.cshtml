@@ -1,0 +1,44 @@
+@model MachKit.Models.LinhKien
+
+@{
+    ViewData["Title"] = "Thêm linh kiện";
+}
+
+<div class="container py-5">
+
+    <div class="mb-4">
+
+        <h1 class="fw-bold mb-1">
+            Thêm linh kiện
+        </h1>
+
+        <p class="text-muted">
+            Thêm sản phẩm linh kiện mới vào kho MạchKit.
+        </p>
+
+    </div>
+
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-body p-4">
+
+            <form asp-area="Admin"
+                  asp-controller="LinhKien"
+                  asp-action="Create"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
+
+                @await Html.PartialAsync(
+                    "_Form",
+                    Model)
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

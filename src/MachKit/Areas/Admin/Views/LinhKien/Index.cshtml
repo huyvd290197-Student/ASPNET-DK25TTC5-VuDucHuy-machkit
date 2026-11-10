@@ -1,0 +1,316 @@
+@model IEnumerable<MachKit.Models.LinhKien>
+
+@{
+    ViewData["Title"] = "Quản lý linh kiện";
+}
+
+<div class="container py-5">
+
+    <div class="d-flex
+                justify-content-between
+                align-items-center
+                mb-4">
+
+        <div>
+
+            <h1 class="fw-bold mb-1">
+                Quản lý linh kiện
+            </h1>
+
+            <p class="text-muted mb-0">
+                Quản lý sản phẩm, giá bán,
+                tồn kho và hình ảnh linh kiện.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="LinhKien"
+           asp-action="Create"
+           class="btn btn-primary">
+
+            <i class="bi bi-plus-circle me-1"></i>
+            Thêm linh kiện
+
+        </a>
+
+    </div>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+
+            <i class="bi bi-check-circle-fill me-1"></i>
+
+            @TempData["Success"]
+
+        </div>
+    }
+
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table
+                              table-hover
+                              align-middle
+                              mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th style="width:90px;">
+                                Ảnh
+                            </th>
+
+                            <th>
+                                Mã
+                            </th>
+
+                            <th>
+                                Tên linh kiện
+                            </th>
+
+                            <th>
+                                Danh mục
+                            </th>
+
+                            <th>
+                                Thương hiệu
+                            </th>
+
+                            <th class="text-end">
+                                Giá
+                            </th>
+
+                            <th class="text-center">
+                                Tồn
+                            </th>
+
+                            <th class="text-center">
+                                Trạng thái
+                            </th>
+
+                            <th style="min-width:230px;"
+                                class="text-end">
+
+                                Thao tác
+
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @if (!Model.Any())
+                        {
+                            <tr>
+
+                                <td colspan="9"
+                                    class="text-center
+                                           text-muted
+                                           py-5">
+
+                                    Chưa có linh kiện.
+
+                                </td>
+
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+
+                                    <!-- ẢNH -->
+                                    <td>
+
+                                        @if (!string.IsNullOrWhiteSpace(x.HinhAnh))
+                                        {
+                                            <img src="@x.HinhAnh"
+                                                 alt="@x.TenLinhKien"
+                                                 style="
+                                                    width:65px;
+                                                    height:55px;
+                                                    object-fit:cover;
+                                                    border-radius:8px;
+                                                 " />
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-light
+                                                        border
+                                                        rounded
+                                                        d-flex
+                                                        align-items-center
+                                                        justify-content-center"
+                                                 style="
+                                                    width:65px;
+                                                    height:55px;
+                                                 ">
+
+                                                <i class="bi bi-image text-muted">
+                                                </i>
+
+                                            </div>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- MÃ -->
+                                    <td>
+                                        <code>
+                                            @x.MaLinhKien
+                                        </code>
+                                    </td>
+
+
+                                    <!-- TÊN -->
+                                    <td>
+
+                                        <strong>
+                                            @x.TenLinhKien
+                                        </strong>
+
+                                        <div class="small text-muted">
+                                            @x.Slug
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- DANH MỤC -->
+                                    <td>
+                                        @(x.DanhMuc?.TenDanhMuc ?? "—")
+                                    </td>
+
+
+                                    <!-- THƯƠNG HIỆU -->
+                                    <td>
+                                        @(x.ThuongHieu?.TenThuongHieu ?? "—")
+                                    </td>
+
+
+                                    <!-- GIÁ -->
+                                    <td class="text-end fw-bold">
+                                        @x.Gia.ToString("N0") đ
+                                    </td>
+
+
+                                    <!-- TỒN -->
+                                    <td class="text-center">
+
+                                        @if (x.SoLuongTon <= x.MucTonToiThieu)
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                @x.SoLuongTon
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">
+                                                @x.SoLuongTon
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- TRẠNG THÁI -->
+                                    <td class="text-center">
+
+                                        @if (x.NgungBan)
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Ngừng bán
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">
+                                                Đang bán
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- THAO TÁC -->
+                                    <td class="text-end text-nowrap">
+
+                                        <a asp-area="Admin"
+                                           asp-controller="LinhKien"
+                                           asp-action="Edit"
+                                           asp-route-id="@x.Id"
+                                           class="btn
+                                                  btn-sm
+                                                  btn-outline-primary">
+
+                                            Sửa
+
+                                        </a>
+
+
+                                        <a asp-area="Admin"
+                                           asp-controller="ThongSo"
+                                           asp-action="Index"
+                                           asp-route-linhKienId="@x.Id"
+                                           class="btn
+                                                  btn-sm
+                                                  btn-outline-info">
+
+                                            Thông số
+
+                                        </a>
+
+
+                                        <form asp-area="Admin"
+                                              asp-controller="LinhKien"
+                                              asp-action="Toggle"
+                                              asp-route-id="@x.Id"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="btn
+                                                           btn-sm
+                                                           btn-outline-warning">
+
+                                                @(x.NgungBan
+                                                    ? "Mở bán"
+                                                    : "Ngừng bán")
+
+                                            </button>
+
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

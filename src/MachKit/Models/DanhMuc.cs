@@ -12,8 +12,11 @@ public class DanhMuc
     [Required, StringLength(120)]
     public string Slug { get; set; } = "";
 
+    public int? DanhMucChaId { get; set; }
+    public DanhMuc? DanhMucCha { get; set; }
+
     public int ThuTu { get; set; }
 
-    public ICollection<LinhKien> LinhKiens { get; set; }
-        = new List<LinhKien>();
+    public ICollection<DanhMuc> DanhMucCons { get; set; } = new List<DanhMuc>();
+    public ICollection<LinhKien> LinhKiens { get; set; } = new List<LinhKien>();
 }

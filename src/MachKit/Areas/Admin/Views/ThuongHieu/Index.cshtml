@@ -1,0 +1,3 @@
+@model IEnumerable<ThuongHieu>
+@{ ViewData["Title"]="Thương hiệu"; }
+<div class="container py-5"><div class="d-flex justify-content-between mb-3"><h1>Thương hiệu</h1><a asp-action="Create" class="btn btn-primary">Thêm thương hiệu</a></div><table class="table table-bordered bg-white"><thead><tr><th>Tên</th><th>Quốc gia</th><th></th></tr></thead><tbody>@foreach(var x in Model){<tr><td>@x.TenThuongHieu</td><td>@x.QuocGia</td><td><a asp-action="Edit" asp-route-id="@x.Id" class="btn btn-sm btn-outline-primary">Sửa</a></td></tr>}</tbody></table></div>

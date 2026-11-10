@@ -1,0 +1,51 @@
+@model MachKit.Models.LinhKien
+
+@{
+    ViewData["Title"] = "Sửa linh kiện";
+}
+
+<div class="container py-5">
+
+    <div class="mb-4">
+
+        <h1 class="fw-bold mb-1">
+            Sửa linh kiện
+        </h1>
+
+        <p class="text-muted">
+            Cập nhật thông tin linh kiện trong MạchKit.
+        </p>
+
+    </div>
+
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-body p-4">
+
+            <form asp-area="Admin"
+                  asp-controller="LinhKien"
+                  asp-action="Edit"
+                  asp-route-id="@Model.Id"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="Id"
+                       type="hidden" />
+
+                <input asp-for="HinhAnh"
+                       type="hidden" />
+
+                @await Html.PartialAsync(
+                    "_Form",
+                    Model)
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

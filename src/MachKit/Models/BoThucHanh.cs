@@ -13,11 +13,8 @@ public class BoThucHanh
     public string TenBo { get; set; } = "";
 
     public string? MoTa { get; set; }
-
     public string? HinhAnh { get; set; }
-
     public bool KichHoat { get; set; } = true;
 
-    public ICollection<ThanhPhanBo> ThanhPhans { get; set; }
-        = new List<ThanhPhanBo>();
+    public ICollection<ThanhPhanBo> ThanhPhans { get; set; } = new List<ThanhPhanBo>();
 }

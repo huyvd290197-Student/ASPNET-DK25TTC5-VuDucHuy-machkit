@@ -5,7 +5,6 @@ namespace MachKit.Models;
 public class ThongSoKyThuat
 {
     public int Id { get; set; }
-
     public int LinhKienId { get; set; }
     public LinhKien? LinhKien { get; set; }
 

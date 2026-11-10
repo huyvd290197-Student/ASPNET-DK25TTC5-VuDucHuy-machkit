@@ -12,6 +12,5 @@ public class ThuongHieu
     [StringLength(100)]
     public string? QuocGia { get; set; }
 
-    public ICollection<LinhKien> LinhKiens { get; set; }
-        = new List<LinhKien>();
+    public ICollection<LinhKien> LinhKiens { get; set; } = new List<LinhKien>();
 }

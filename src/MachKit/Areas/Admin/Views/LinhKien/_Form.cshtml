@@ -1,0 +1,281 @@
+@model MachKit.Models.LinhKien
+
+<div asp-validation-summary="All"
+     class="alert alert-danger"
+     role="alert">
+</div>
+
+
+<div class="row g-4">
+
+    <!-- MÃ LINH KIỆN -->
+    <div class="col-md-4">
+        <label asp-for="MaLinhKien"
+               class="form-label fw-bold">
+            Mã linh kiện
+        </label>
+
+        <input asp-for="MaLinhKien"
+               class="form-control"
+               placeholder="Ví dụ: LK0004" />
+
+        <span asp-validation-for="MaLinhKien"
+              class="text-danger">
+        </span>
+    </div>
+
+
+    <!-- TÊN LINH KIỆN -->
+    <div class="col-md-8">
+        <label asp-for="TenLinhKien"
+               class="form-label fw-bold">
+            Tên linh kiện
+        </label>
+
+        <input asp-for="TenLinhKien"
+               class="form-control"
+               placeholder="Ví dụ: LED xanh 5mm" />
+
+        <span asp-validation-for="TenLinhKien"
+              class="text-danger">
+        </span>
+    </div>
+
+
+    <!-- DANH MỤC -->
+    <div class="col-md-6">
+        <label asp-for="DanhMucId"
+               class="form-label fw-bold">
+            Danh mục
+        </label>
+
+        <select asp-for="DanhMucId"
+                asp-items="ViewBag.DanhMucId"
+                class="form-select">
+
+            <option value="">
+                -- Chọn danh mục --
+            </option>
+
+        </select>
+
+        <span asp-validation-for="DanhMucId"
+              class="text-danger">
+        </span>
+    </div>
+
+
+    <!-- THƯƠNG HIỆU -->
+    <div class="col-md-6">
+        <label asp-for="ThuongHieuId"
+               class="form-label fw-bold">
+            Thương hiệu
+        </label>
+
+        <select asp-for="ThuongHieuId"
+                asp-items="ViewBag.ThuongHieuId"
+                class="form-select">
+
+            <option value="">
+                -- Chọn thương hiệu --
+            </option>
+
+        </select>
+
+        <span asp-validation-for="ThuongHieuId"
+              class="text-danger">
+        </span>
+    </div>
+
+
+    <!-- GIÁ -->
+    <div class="col-md-4">
+        <label asp-for="Gia"
+               class="form-label fw-bold">
+            Giá bán
+        </label>
+
+        <div class="input-group">
+
+            <input asp-for="Gia"
+                   type="number"
+                   min="0"
+                   step="100"
+                   class="form-control" />
+
+            <span class="input-group-text">
+                đ
+            </span>
+
+        </div>
+
+        <span asp-validation-for="Gia"
+              class="text-danger">
+        </span>
+    </div>
+
+
+    <!-- TỒN KHO -->
+    <div class="col-md-4">
+        <label asp-for="SoLuongTon"
+               class="form-label fw-bold">
+            Số lượng tồn
+        </label>
+
+        <input asp-for="SoLuongTon"
+               type="number"
+               min="0"
+               class="form-control" />
+
+        <span asp-validation-for="SoLuongTon"
+              class="text-danger">
+        </span>
+    </div>
+
+
+    <!-- MỨC TỒN TỐI THIỂU -->
+    <div class="col-md-4">
+        <label asp-for="MucTonToiThieu"
+               class="form-label fw-bold">
+            Mức tồn tối thiểu
+        </label>
+
+        <input asp-for="MucTonToiThieu"
+               type="number"
+               min="0"
+               class="form-control" />
+
+        <span asp-validation-for="MucTonToiThieu"
+              class="text-danger">
+        </span>
+    </div>
+
+
+    <!-- MÔ TẢ -->
+    <div class="col-12">
+        <label asp-for="MoTa"
+               class="form-label fw-bold">
+            Mô tả
+        </label>
+
+        <textarea asp-for="MoTa"
+                  class="form-control"
+                  rows="4"
+                  placeholder="Nhập mô tả linh kiện...">
+        </textarea>
+
+        <span asp-validation-for="MoTa"
+              class="text-danger">
+        </span>
+    </div>
+
+
+    <!-- DATASHEET -->
+    <div class="col-md-6">
+        <label asp-for="DatasheetUrl"
+               class="form-label fw-bold">
+            Đường dẫn Datasheet
+        </label>
+
+        <input asp-for="DatasheetUrl"
+               class="form-control"
+               placeholder="https://..." />
+
+        <span asp-validation-for="DatasheetUrl"
+              class="text-danger">
+        </span>
+    </div>
+
+
+    <!-- ẢNH -->
+    <div class="col-md-6">
+
+        <label class="form-label fw-bold">
+            Ảnh linh kiện
+        </label>
+
+        <input type="file"
+               name="anh"
+               class="form-control"
+               accept=".jpg,.jpeg,.png,.webp" />
+
+        <div class="form-text">
+            Chấp nhận JPG, JPEG, PNG, WEBP.
+            Tối đa 2 MB.
+        </div>
+
+        @if (ViewData.ModelState["anh"]?.Errors.Count > 0)
+        {
+            <div class="text-danger mt-1">
+                @ViewData.ModelState["anh"]!.Errors[0].ErrorMessage
+            </div>
+        }
+
+    </div>
+
+
+    <!-- ẢNH HIỆN TẠI KHI SỬA -->
+    @if (!string.IsNullOrWhiteSpace(Model.HinhAnh))
+    {
+        <div class="col-12">
+
+            <label class="form-label fw-bold">
+                Ảnh hiện tại
+            </label>
+
+            <div>
+                <img src="@Model.HinhAnh"
+                     alt="@Model.TenLinhKien"
+                     style="
+                        width:180px;
+                        height:140px;
+                        object-fit:cover;
+                        border-radius:12px;
+                        border:1px solid #ddd;
+                     " />
+            </div>
+
+        </div>
+    }
+
+
+    <!-- TRẠNG THÁI -->
+    <div class="col-12">
+
+        <div class="form-check">
+
+            <input asp-for="NgungBan"
+                   class="form-check-input" />
+
+            <label asp-for="NgungBan"
+                   class="form-check-label fw-bold">
+                Ngừng bán linh kiện này
+            </label>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="mt-4 d-flex gap-2">
+
+    <button type="submit"
+            class="btn btn-primary px-4">
+
+        <i class="bi bi-save me-1"></i>
+        Lưu
+
+    </button>
+
+    <a asp-area="Admin"
+       asp-controller="LinhKien"
+       asp-action="Index"
+       class="btn btn-outline-secondary">
+
+        Quay lại
+
+    </a>
+
+</div>

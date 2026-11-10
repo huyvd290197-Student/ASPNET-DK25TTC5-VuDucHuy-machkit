@@ -1,0 +1,6 @@
+@model DanhMuc
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="mb-3"><label asp-for="TenDanhMuc" class="form-label">Tên danh mục</label><input asp-for="TenDanhMuc" class="form-control" /><span asp-validation-for="TenDanhMuc" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="DanhMucChaId" class="form-label">Danh mục cha</label><select asp-for="DanhMucChaId" asp-items="ViewBag.DanhMucChaId" class="form-select"><option value="">-- Không có --</option></select></div>
+<div class="mb-3"><label asp-for="ThuTu" class="form-label">Thứ tự</label><input asp-for="ThuTu" class="form-control" /></div>
+<button class="btn btn-primary">Lưu</button><a asp-action="Index" class="btn btn-outline-secondary">Quay lại</a>

@@ -1,0 +1,33 @@
+@model MachKit.Models.DanhMuc
+
+@{
+    ViewData["Title"] = "Thêm danh mục";
+}
+
+<div class="container py-5">
+
+    <div class="mb-4">
+        <h1 class="fw-bold">Thêm danh mục</h1>
+        <p class="text-muted">
+            Tạo danh mục mới cho các linh kiện trong MạchKit.
+        </p>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <form asp-area="Admin"
+                  asp-controller="DanhMuc"
+                  asp-action="Create"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                @await Html.PartialAsync("_Form", Model)
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
