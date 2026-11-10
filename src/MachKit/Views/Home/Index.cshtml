@@ -1,50 +1,1011 @@
 @model MachKit.Models.DuToanBo
 @using System.Globalization
+
 @{
-    Layout = null;
-    string Tien(decimal soTien) => soTien.ToString("N0", CultureInfo.GetCultureInfo("vi-VN")) + " đ";
+    Layout = "_Layout";
+    ViewData["Title"] = "Dự toán bộ thực hành";
+
+    string Tien(decimal soTien)
+        => soTien.ToString("N0",
+            CultureInfo.GetCultureInfo("vi-VN")) + " đ";
 }
-<!doctype html>
-<html lang="vi">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dự toán bộ thực hành | MạchKit</title>
-    <link rel="stylesheet" href="@Url.Content("~/css/site.css")" />
-</head>
-<body>
-<header><div class="wrap bar"><strong>MạchKit</strong><span>Xưởng thực hành điện tử</span></div></header>
-<main class="wrap">
-    <p class="eyebrow">BỘ THỰC HÀNH / MK-01</p>
-    <h1>Đèn LED đôi trên breadboard</h1>
-    <p class="intro">Bạn muốn chuẩn bị bao nhiêu bộ? MạchKit sẽ tính số linh kiện cần mua và chỉ ra món còn thiếu.</p>
-    <section class="controls" aria-label="Chọn số bộ">
-        <form method="get" action="@Url.Action("Index", "Home")">
-            <label for="soBo">Số bộ cần chuẩn bị</label>
-            <div class="fields"><input name="soBo" id="soBo" type="number" min="1" max="99" step="1" required value="@Model.GiaTriNhap" /><button type="submit">Tính linh kiện</button></div>
-        </form>
-        <div class="limit">Kho mẫu hiện đủ cho <strong>@Model.SoBoToiDa bộ</strong></div>
+
+<style>
+    /* ===== MẠCHKIT - TRANG CHỦ ===== */
+
+    .mk-page {
+        background: #f5f8f7;
+        min-height: 100vh;
+    }
+
+    /* HERO */
+    .mk-hero {
+        position: relative;
+        overflow: hidden;
+        background:
+            linear-gradient(110deg,
+                rgba(8, 47, 44, .97) 0%,
+                rgba(12, 83, 73, .91) 55%,
+                rgba(8, 47, 44, .75) 100%),
+            url('/images/hero-machkit.jpg') center/cover no-repeat;
+        color: white;
+        padding: 70px 0;
+    }
+
+    .mk-hero::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.05);
+        top: -120px;
+        right: 8%;
+    }
+
+    .mk-hero::after {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(249, 177, 21, .13);
+        bottom: -80px;
+        right: 32%;
+    }
+
+    .mk-hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .mk-eyebrow {
+        display: inline-block;
+        font-size: .82rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #ffd166;
+        margin-bottom: 14px;
+    }
+
+    .mk-hero h1 {
+        font-size: clamp(2.25rem, 5vw, 4.4rem);
+        font-weight: 800;
+        line-height: 1.05;
+        margin-bottom: 20px;
+        max-width: 760px;
+    }
+
+    .mk-hero-description {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: rgba(255,255,255,.84);
+        max-width: 690px;
+        margin-bottom: 28px;
+    }
+
+    .mk-hero-image {
+        position: relative;
+        z-index: 2;
+        border-radius: 26px;
+        overflow: hidden;
+        min-height: 330px;
+        background:
+            linear-gradient(145deg, #173c37, #0c6559);
+        box-shadow: 0 25px 60px rgba(0,0,0,.30);
+        border: 1px solid rgba(255,255,255,.18);
+    }
+
+    .mk-hero-image img {
+        width: 100%;
+        height: 330px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .mk-hero-image .mk-image-fallback {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8rem;
+        color: rgba(255,255,255,.13);
+        z-index: 0;
+    }
+
+    .mk-hero-image img {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* THÔNG SỐ NHANH */
+    .mk-stats-wrap {
+        margin-top: -32px;
+        position: relative;
+        z-index: 5;
+    }
+
+    .mk-stats {
+        background: white;
+        border-radius: 22px;
+        box-shadow: 0 15px 45px rgba(13, 55, 49, .10);
+        padding: 20px;
+        border: 1px solid #e4ece9;
+    }
+
+    .mk-stat {
+        padding: 12px 20px;
+        text-align: center;
+    }
+
+    .mk-stat strong {
+        display: block;
+        color: #0d6659;
+        font-size: 1.45rem;
+        margin-bottom: 3px;
+    }
+
+    .mk-stat span {
+        color: #6b7774;
+        font-size: .9rem;
+    }
+
+    /* KHỐI CHUNG */
+    .mk-section {
+        padding: 65px 0;
+    }
+
+    .mk-section-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #16312e;
+        margin-bottom: 7px;
+    }
+
+    .mk-section-subtitle {
+        color: #75817e;
+        margin-bottom: 30px;
+    }
+
+    /* FORM */
+    .mk-calculator {
+        background: white;
+        border-radius: 24px;
+        padding: 32px;
+        border: 1px solid #e4ece9;
+        box-shadow: 0 12px 35px rgba(26, 61, 55, .08);
+    }
+
+    .mk-calculator-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 24px;
+    }
+
+    .mk-calculator-icon {
+        width: 58px;
+        height: 58px;
+        flex: 0 0 58px;
+        border-radius: 17px;
+        background: linear-gradient(135deg, #0d7565, #0a5147);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: 0 8px 18px rgba(13, 117, 101, .20);
+    }
+
+    .mk-calculator-header h2 {
+        font-size: 1.45rem;
+        font-weight: 800;
+        color: #17322e;
+        margin: 0;
+    }
+
+    .mk-calculator-header p {
+        color: #77837f;
+        margin: 3px 0 0;
+    }
+
+    .mk-control-box {
+        background: #eef7f4;
+        border: 1px solid #daeae5;
+        border-radius: 18px;
+        padding: 22px;
+    }
+
+    .mk-control-box label {
+        font-weight: 700;
+        color: #203b37;
+        margin-bottom: 9px;
+    }
+
+    .mk-number-input {
+        height: 50px;
+        border-radius: 12px !important;
+        border: 1px solid #c8d7d3 !important;
+        font-weight: 700;
+    }
+
+    .mk-btn-main {
+        min-height: 50px;
+        border: 0;
+        border-radius: 12px;
+        padding: 0 25px;
+        font-weight: 750;
+        background: linear-gradient(135deg, #0d7565, #0a594e);
+        color: white;
+        transition: .2s;
+    }
+
+    .mk-btn-main:hover {
+        background: linear-gradient(135deg, #0a5f53, #073f38);
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    .mk-limit {
+        color: #52635f;
+        font-size: .95rem;
+    }
+
+    .mk-limit strong {
+        color: #0c6b5c;
+    }
+
+    /* BẢNG */
+    .mk-table-card {
+        margin-top: 30px;
+        background: white;
+        border-radius: 22px;
+        overflow: hidden;
+        border: 1px solid #e4ece9;
+        box-shadow: 0 12px 35px rgba(26, 61, 55, .07);
+    }
+
+    .mk-table-title {
+        padding: 23px 25px 10px;
+    }
+
+    .mk-table-title h3 {
+        font-weight: 800;
+        color: #193630;
+        font-size: 1.35rem;
+        margin: 0;
+    }
+
+    .mk-table {
+        margin-bottom: 0;
+    }
+
+    .mk-table thead th {
+        background: #edf4f2;
+        color: #3f625c;
+        font-size: .82rem;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        padding: 15px 14px;
+        border: none;
+        white-space: nowrap;
+    }
+
+    .mk-table tbody td,
+    .mk-table tbody th {
+        padding: 17px 14px;
+        vertical-align: middle;
+        border-color: #edf1ef;
+    }
+
+    .mk-table tbody tr:hover {
+        background: #fbfdfc;
+    }
+
+    .mk-code {
+        display: block;
+        color: #8b9794;
+        font-weight: 600;
+        font-size: .75rem;
+        margin-top: 2px;
+    }
+
+    .mk-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 11px;
+        border-radius: 999px;
+        font-size: .82rem;
+        font-weight: 750;
+    }
+
+    .mk-status-enough {
+        color: #087443;
+        background: #e8f8ef;
+    }
+
+    .mk-status-missing {
+        color: #ad3429;
+        background: #fff0ed;
+    }
+
+    /* TỔNG */
+    .mk-total {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 22px 25px;
+        background: #fafcfb;
+        border-top: 1px solid #edf1ef;
+        gap: 20px;
+    }
+
+    .mk-total span {
+        color: #65736f;
+    }
+
+    .mk-total strong {
+        color: #0d6659;
+        font-size: 1.6rem;
+    }
+
+    /* THÔNG BÁO */
+    .mk-notice {
+        border-radius: 15px;
+        padding: 15px 18px;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 650;
+    }
+
+    .mk-notice-ok {
+        background: #e9f8f0;
+        border: 1px solid #cceedd;
+        color: #087443;
+    }
+
+    .mk-notice-warn {
+        background: #fff3e9;
+        border: 1px solid #ffdabe;
+        color: #a54a13;
+    }
+
+    /* CARD PHỤ */
+    .mk-side-card {
+        height: 100%;
+        background: linear-gradient(160deg, #113d37, #0b6458);
+        color: white;
+        padding: 30px;
+        border-radius: 24px;
+        box-shadow: 0 15px 38px rgba(15, 81, 71, .17);
+    }
+
+    .mk-side-card h3 {
+        font-weight: 800;
+        margin-bottom: 20px;
+    }
+
+    .mk-feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .mk-feature-list li {
+        display: flex;
+        gap: 11px;
+        padding: 13px 0;
+        border-bottom: 1px solid rgba(255,255,255,.11);
+        color: rgba(255,255,255,.88);
+    }
+
+    .mk-feature-list li:last-child {
+        border-bottom: 0;
+    }
+
+    .mk-feature-list i {
+        color: #ffd166;
+        margin-top: 2px;
+    }
+
+    /* SẢN PHẨM */
+    .mk-product-card {
+        height: 100%;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid #e4ece9;
+        box-shadow: 0 9px 28px rgba(22, 61, 55, .07);
+        transition: transform .22s ease, box-shadow .22s ease;
+    }
+
+    .mk-product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 35px rgba(22, 61, 55, .12);
+    }
+
+    .mk-product-media {
+        position: relative;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #edf7f4, #dcece8);
+        overflow: hidden;
+        color: #8ab0a8;
+        font-size: 4.8rem;
+    }
+
+    .mk-product-media img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .mk-product-body {
+        padding: 20px;
+    }
+
+    .mk-product-code {
+        color: #0d7565;
+        text-transform: uppercase;
+        font-size: .76rem;
+        letter-spacing: 1px;
+        font-weight: 800;
+    }
+
+    .mk-product-name {
+        font-size: 1.12rem;
+        font-weight: 800;
+        color: #1b3933;
+        margin: 5px 0 12px;
+    }
+
+    .mk-product-info {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        color: #71807c;
+        font-size: .9rem;
+    }
+
+    .mk-price {
+        margin-top: 15px;
+        color: #c25c12;
+        font-size: 1.15rem;
+        font-weight: 800;
+    }
+
+    .mk-hint {
+        margin-top: 25px;
+        color: #7a8784;
+        font-size: .88rem;
+        line-height: 1.7;
+    }
+
+    @@media (max-width: 767.98px) {
+        .mk-hero {
+            padding: 45px 0 70px;
+        }
+
+        .mk-hero-image {
+            min-height: 240px;
+            margin-top: 30px;
+        }
+
+        .mk-hero-image img {
+            height: 240px;
+        }
+
+        .mk-stats-wrap {
+            margin-top: -25px;
+        }
+
+        .mk-stat {
+            border-bottom: 1px solid #edf1ef;
+        }
+
+        .mk-stat:last-child {
+            border-bottom: 0;
+        }
+
+        .mk-calculator {
+            padding: 20px;
+        }
+
+        .mk-total {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+</style>
+
+
+<div class="mk-page">
+
+    <!-- ==================== BANNER ==================== -->
+    <section class="mk-hero">
+        <div class="container mk-hero-content">
+            <div class="row align-items-center">
+
+                <div class="col-lg-7">
+                    <span class="mk-eyebrow">
+                        <i class="bi bi-lightning-charge-fill me-1"></i>
+                        Bộ thực hành / MK-01
+                    </span>
+
+                    <h1>
+                        Đèn LED đôi<br />
+                        trên breadboard
+                    </h1>
+
+                    <p class="mk-hero-description">
+                        MạchKit giúp bạn tự động tính số lượng linh kiện cần chuẩn bị,
+                        kiểm tra tồn kho và phát hiện ngay linh kiện còn thiếu
+                        trước khi mua.
+                    </p>
+
+                    <a href="#du-toan"
+                       class="btn btn-warning btn-lg rounded-pill px-4 fw-bold">
+                        <i class="bi bi-calculator-fill me-2"></i>
+                        Tính linh kiện
+                    </a>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="mk-hero-image">
+                        <div class="mk-image-fallback">
+                            <i class="bi bi-cpu-fill"></i>
+                        </div>
+
+                        <img src="~/images/hero-machkit.jpg"
+                             alt="Bộ thực hành điện tử MạchKit"
+                             onerror="this.style.display='none';" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </section>
-    @if (Model.Loi is not null)
+
+
+    <!-- ==================== THÔNG SỐ NHANH ==================== -->
+    <div class="container mk-stats-wrap">
+        <div class="mk-stats">
+            <div class="row g-0">
+
+                <div class="col-md-4 mk-stat">
+                    <strong>
+                        <i class="bi bi-boxes me-1"></i>
+                        @Model.SoBoToiDa bộ
+                    </strong>
+                    <span>Số bộ tối đa theo tồn kho hiện tại</span>
+                </div>
+
+                <div class="col-md-4 mk-stat">
+                    <strong>
+                        <i class="bi bi-cpu me-1"></i>
+                        @Model.Dong.Count
+                    </strong>
+                    <span>Loại linh kiện trong bộ thực hành</span>
+                </div>
+
+                <div class="col-md-4 mk-stat">
+                    <strong>
+                        <i class="bi bi-lightning-charge me-1"></i>
+                        Tự động
+                    </strong>
+                    <span>Kiểm tra thiếu hàng theo số bộ</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================== DỰ TOÁN ==================== -->
+    <section id="du-toan" class="mk-section">
+        <div class="container">
+
+            <div class="text-center mb-5">
+                <h2 class="mk-section-title">
+                    Dự toán bộ thực hành
+                </h2>
+
+                <p class="mk-section-subtitle">
+                    Nhập số bộ cần chuẩn bị để MạchKit tính linh kiện,
+                    số tiền và kiểm tra tồn kho.
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-lg-8">
+
+                    <div class="mk-calculator">
+
+                        <div class="mk-calculator-header">
+                            <div class="mk-calculator-icon">
+                                <i class="bi bi-calculator-fill"></i>
+                            </div>
+
+                            <div>
+                                <h2>Đèn LED đôi trên breadboard</h2>
+                                <p>Mã bộ: MK-01</p>
+                            </div>
+                        </div>
+
+
+                        <!-- FORM NHẬP SỐ BỘ -->
+                        <div class="mk-control-box">
+                            <form method="get"
+                                  action="@Url.Action("Index", "Home")">
+
+                                <div class="row align-items-end g-3">
+
+                                    <div class="col-md-5">
+                                        <label for="soBo"
+                                               class="form-label">
+                                            Số bộ cần chuẩn bị
+                                        </label>
+
+                                        <input name="soBo"
+                                               id="soBo"
+                                               type="number"
+                                               min="1"
+                                               max="99"
+                                               step="1"
+                                               required
+                                               value="@Model.GiaTriNhap"
+                                               class="form-control mk-number-input" />
+                                    </div>
+
+                                    <div class="col-md-auto">
+                                        <button type="submit"
+                                                class="mk-btn-main">
+                                            <i class="bi bi-calculator me-2"></i>
+                                            Tính linh kiện
+                                        </button>
+                                    </div>
+
+                                    <div class="col-md text-md-end">
+                                        <div class="mk-limit pb-2">
+                                            Kho hiện đủ tối đa
+                                            <strong>@Model.SoBoToiDa bộ</strong>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+
+
+                        <!-- LỖI NHẬP -->
+                        @if (Model.Loi is not null)
+                        {
+                            <div class="mk-notice mk-notice-warn"
+                                 role="alert">
+
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                <span>@Model.Loi</span>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- BẢNG LINH KIỆN -->
+                            <div class="mk-table-card">
+
+                                <div class="mk-table-title">
+                                    <h3>
+                                        <i class="bi bi-list-check me-2 text-success"></i>
+                                        Bảng linh kiện cần mua
+                                    </h3>
+                                </div>
+
+                                <div class="table-responsive">
+
+                                    <table class="table mk-table">
+
+                                        <thead>
+                                            <tr>
+                                                <th>Linh kiện</th>
+                                                <th class="text-center">Định mức / bộ</th>
+                                                <th class="text-center">Cần mua</th>
+                                                <th class="text-center">Còn kho</th>
+                                                <th class="text-center">Kiểm tra</th>
+                                                <th class="text-end">Đơn giá</th>
+                                                <th class="text-end">Thành tiền</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                            @foreach (var d in Model.Dong)
+                                            {
+                                                <tr>
+
+                                                    <th scope="row">
+                                                        @d.LinhKien.Ten
+
+                                                        <span class="mk-code">
+                                                            @d.LinhKien.Ma
+                                                        </span>
+                                                    </th>
+
+                                                    <td class="text-center">
+                                                        @d.LinhKien.DinhMuc
+                                                    </td>
+
+                                                    <td class="text-center">
+                                                        <strong>@d.Can</strong>
+                                                    </td>
+
+                                                    <td class="text-center">
+                                                        @d.LinhKien.Ton
+                                                    </td>
+
+                                                    <td class="text-center">
+
+                                                        @if (d.Thieu > 0)
+                                                        {
+                                                            <span class="mk-status mk-status-missing">
+                                                                <i class="bi bi-exclamation-circle-fill"></i>
+                                                                Thiếu @d.Thieu
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="mk-status mk-status-enough">
+                                                                <i class="bi bi-check-circle-fill"></i>
+                                                                Đủ
+                                                            </span>
+                                                        }
+
+                                                    </td>
+
+                                                    <td class="text-end">
+                                                        @Tien(d.LinhKien.DonGia)
+                                                    </td>
+
+                                                    <td class="text-end fw-bold">
+                                                        @Tien(d.ThanhTien)
+                                                    </td>
+
+                                                </tr>
+                                            }
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+
+                                <!-- TỔNG TIỀN -->
+                                <div class="mk-total">
+
+                                    <span>
+                                        Tạm tính cho
+                                        <strong class="text-dark">
+                                            @Model.GiaTriNhap bộ
+                                        </strong>
+                                    </span>
+
+                                    <strong>
+                                        @Tien(Model.TongTien)
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- KẾT QUẢ -->
+                            @if (Model.DuHang)
+                            {
+                                <div class="mk-notice mk-notice-ok"
+                                     role="status">
+
+                                    <i class="bi bi-check-circle-fill"></i>
+
+                                    <span>
+                                        Đủ linh kiện cho
+                                        <strong>@Model.GiaTriNhap bộ</strong>
+                                        đã chọn.
+                                    </span>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="mk-notice mk-notice-warn"
+                                     role="status">
+
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+
+                                    <span>
+                                        Chưa đủ linh kiện.
+                                        Hãy giảm số bộ hoặc xem dòng đang báo thiếu.
+                                    </span>
+
+                                </div>
+                            }
+                        }
+
+
+                        <p class="mk-hint">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Giá và tồn kho hiện tại dùng cho mục đích thực hành.
+                            Dự toán chưa bao gồm phí giao hàng, chưa tạo đơn
+                            và chưa giữ hàng.
+                        </p>
+
+                    </div>
+                </div>
+
+
+                <!-- ==================== CỘT PHẢI ==================== -->
+                <div class="col-lg-4">
+
+                    <div class="mk-side-card">
+
+                        <div class="mb-4">
+                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                                Điểm khác biệt
+                            </span>
+                        </div>
+
+                        <h3>
+                            Vì sao chọn MạchKit?
+                        </h3>
+
+                        <ul class="mk-feature-list">
+
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>
+                                    Tính linh kiện theo số bộ thực hành,
+                                    không cần tự nhân từng món.
+                                </span>
+                            </li>
+
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>
+                                    So sánh ngay số lượng cần mua
+                                    với tồn kho hiện có.
+                                </span>
+                            </li>
+
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>
+                                    Chỉ rõ chính xác linh kiện nào còn thiếu.
+                                </span>
+                            </li>
+
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>
+                                    Phù hợp với sinh viên,
+                                    giáo viên và các buổi thực hành điện tử.
+                                </span>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ==================== LINH KIỆN TRONG BỘ ==================== -->
+    @if (Model.Loi is null)
     {
-        <p class="notice warn" role="alert">@Model.Loi</p>
+        <section class="pb-5">
+            <div class="container">
+
+                <div class="mb-4">
+                    <h2 class="mk-section-title">
+                        Linh kiện trong bộ
+                    </h2>
+
+                    <p class="mk-section-subtitle">
+                        Các linh kiện chính sử dụng cho bộ thực hành
+                        Đèn LED đôi trên breadboard.
+                    </p>
+                </div>
+
+
+                <div class="row g-4">
+
+                    @foreach (var d in Model.Dong)
+                    {
+                        string tenThuong = d.LinhKien.Ten.ToLowerInvariant();
+
+                        string anh = tenThuong.Contains("led")
+                            ? Url.Content("~/images/led-do.jpg")
+                            : tenThuong.Contains("điện trở") ||
+                              tenThuong.Contains("dien tro")
+                                ? Url.Content("~/images/dien-tro.jpg")
+                                : tenThuong.Contains("breadboard")
+                                    ? Url.Content("~/images/breadboard.jpg")
+                                    : Url.Content("~/images/hero-machkit.jpg");
+
+                        string icon = tenThuong.Contains("led")
+                            ? "bi-lightbulb-fill"
+                            : tenThuong.Contains("breadboard")
+                                ? "bi-grid-3x3-gap-fill"
+                                : "bi-cpu-fill";
+
+
+                        <div class="col-md-6 col-lg-4">
+
+                            <div class="mk-product-card">
+
+                                <div class="mk-product-media">
+
+                                    <i class="bi @icon"></i>
+
+                                    <img src="@anh"
+                                         alt="@d.LinhKien.Ten"
+                                         onerror="this.style.display='none';" />
+
+                                </div>
+
+
+                                <div class="mk-product-body">
+
+                                    <div class="mk-product-code">
+                                        @d.LinhKien.Ma
+                                    </div>
+
+                                    <div class="mk-product-name">
+                                        @d.LinhKien.Ten
+                                    </div>
+
+                                    <div class="mk-product-info">
+
+                                        <span>
+                                            <i class="bi bi-box-seam me-1"></i>
+                                            Kho: @d.LinhKien.Ton
+                                        </span>
+
+                                        <span>
+                                            <i class="bi bi-layers me-1"></i>
+                                            @d.LinhKien.DinhMuc / bộ
+                                        </span>
+
+                                    </div>
+
+                                    <div class="mk-price">
+                                        @Tien(d.LinhKien.DonGia)
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+        </section>
     }
-    else
-    {
-        <h2>Bảng linh kiện cần mua</h2>
-        <div class="scroll"><table>
-            <thead><tr><th scope="col">Linh kiện</th><th scope="col">Định mức / bộ</th><th scope="col">Cần mua</th><th scope="col">Còn kho</th><th scope="col">Kiểm tra</th><th scope="col">Đơn giá</th><th scope="col">Thành tiền</th></tr></thead>
-            <tbody>
-            @foreach (var d in Model.Dong)
-            {
-                <tr><th scope="row">@d.LinhKien.Ten<small>@d.LinhKien.Ma</small></th><td>@d.LinhKien.DinhMuc</td><td><strong>@d.Can</strong></td><td>@d.LinhKien.Ton</td><td class="@(d.Thieu > 0 ? "missing" : "enough")">@(d.Thieu > 0 ? $"Thiếu {d.Thieu}" : "Đủ")</td><td>@Tien(d.LinhKien.DonGia)</td><td>@Tien(d.ThanhTien)</td></tr>
-            }
-            </tbody>
-        </table></div>
-        <div class="total"><span>Tạm tính cho @Model.GiaTriNhap bộ</span><strong>@Tien(Model.TongTien)</strong></div>
-        <p class="notice @(Model.DuHang ? "ok" : "warn")" role="status">@(Model.DuHang ? "Đủ linh kiện cho số bộ đã chọn." : "Chưa đủ linh kiện. Hãy giảm số bộ hoặc xem dòng báo thiếu.")</p>
-    }
-    <p class="hint">Bản thực hành 01 · Giá và tồn kho là dữ liệu minh họa. Dự toán chưa bao gồm phí giao hàng, không tạo đơn và không giữ hàng.</p>
-</main>
-<footer class="wrap">Đồ án ASP.NET · Vũ Đức Huy · DK25TTC5 · 170125378</footer>
-</body></html>
+
+</div>

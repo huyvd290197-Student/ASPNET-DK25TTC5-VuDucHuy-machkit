@@ -1,1 +1,24 @@
 :root{color-scheme:light;font-family:system-ui,"Segoe UI",sans-serif;color:#172c34;background:#f7f9f7}*{box-sizing:border-box}body{margin:0;line-height:1.55}.wrap{width:min(1080px,92%);margin:auto}header{background:#183636;color:#fff}.bar{display:flex;align-items:center;gap:1.4rem;padding-block:1rem}.bar strong{font-size:1.45rem}.bar span{color:#daebe5}main{padding-block:2.8rem 1.5rem}.eyebrow{color:#1b6553;font-size:.77rem;font-weight:750;letter-spacing:.12em}h1{font-size:clamp(2rem,4vw,3.7rem);line-height:1.08;max-width:18ch;margin:.5rem 0 1rem;letter-spacing:-.04em}h2{margin-top:2rem;font-size:1.4rem}.intro{font-size:1.1rem;max-width:64ch}.controls{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:#e7f1eb;padding:1.15rem 1.35rem;border-radius:.7rem}label{font-weight:650}.fields{display:flex;align-items:center;gap:.5rem;margin-top:.4rem}input,button{font:inherit;padding:.45rem .7rem;border-radius:.3rem}input{width:6rem;border:1px solid #668478}button{background:#165b48;color:white;border:1px solid #165b48;cursor:pointer}button:hover{background:#124836}.limit strong{display:inline-block}.scroll{overflow-x:auto;background:white}table{width:100%;min-width:780px;border-collapse:collapse}th,td{text-align:right;padding:.7rem .6rem;border-bottom:1px solid #d8e4df;white-space:nowrap}th:first-child{text-align:left}thead th{font-size:.87rem;color:#366557;background:#eaf1ed}tbody th{font-weight:650}small{display:block;font-size:.7rem;color:#536661;letter-spacing:.04em}.missing{color:#933b18;font-weight:700}.enough{color:#1c604e}.total{padding:1rem .6rem;display:flex;justify-content:space-between;background:white}.total strong{font-size:1.2rem}.notice{padding:.8rem 1rem;border-left:4px solid}.ok{color:#124d3d;background:#e0f1e7}.warn{color:#783516;background:#fff0dd}.hint,footer{color:#4e6562;font-size:.88rem}footer{border-top:1px solid #ccdbd5;padding-block:1.25rem}input:focus-visible,button:focus-visible{outline:3px solid #a34c15;outline-offset:2px}@media(max-width:600px){main{padding-block:1.5rem}.bar{gap:.8rem}.controls{padding:1rem}h2{margin-top:1.4rem}}
+/* Xóa khoảng trắng giữa menu và banner */
+header {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.app-navbar {
+    margin-bottom: 0 !important;
+}
+
+main {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.mk-page {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.mk-hero {
+    margin-top: 0 !important;
+}
