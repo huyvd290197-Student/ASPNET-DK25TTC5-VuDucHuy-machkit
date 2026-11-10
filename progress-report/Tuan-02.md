@@ -35,7 +35,7 @@
 - `8c64bffee127f16cf245a8dea25946525e231e13`: Hoàn thiện giao diện và báo cáo tuần 02.
 
 ## 4. Khó khăn và cách xử lý
-- LocalDB không có trên máy: sử dụng SQL Server Express instance `.\SQLEXPRESS`.
+- LocalDB không có trên máy: sử dụng SQL Server Express instance `.\SQLEXPRESS`
 - SDK .NET 10 gây lỗi CET trên máy Windows: cấu hình project dùng SDK .NET 8.
 - Giao diện ban đầu không dùng Layout: tạo `_Layout.cshtml`, `_ViewStart.cshtml`, `_ViewImports.cshtml` và chỉnh lại Index.
 
