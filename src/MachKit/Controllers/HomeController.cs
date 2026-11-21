@@ -37,12 +37,15 @@ public sealed class HomeController : Controller
 
         var cauThanh = bo.ThanhPhans
             .Where(x => x.LinhKien is not null && !x.LinhKien.NgungBan)
+            
             .Select(x => new LinhKienMau(
                 x.LinhKien!.MaLinhKien,
                 x.LinhKien.TenLinhKien,
                 x.SoLuong,
                 x.LinhKien.SoLuongTon,
-                x.LinhKien.Gia))
+                x.LinhKien.Gia,
+                x.LinhKien.HinhAnh))
+
             .ToArray();
 
         int soBoToiDa = cauThanh.Length == 0 ? 0 : cauThanh.Min(x => x.Ton / x.DinhMuc);

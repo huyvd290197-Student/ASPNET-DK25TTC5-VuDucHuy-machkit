@@ -1,0 +1,232 @@
+@model MachKit.ViewModels.LinhKienDanhSachViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Danh sách linh kiện";
+    var vi = CultureInfo.GetCultureInfo("vi-VN");
+    var giaTuHienThi = Model.GiaTu?.ToString("0", CultureInfo.InvariantCulture);
+    var giaDenHienThi = Model.GiaDen?.ToString("0", CultureInfo.InvariantCulture);
+    int batDau = Model.TongSo == 0 ? 0 : (Model.Trang - 1) * Model.KichThuocTrang + 1;
+    int ketThuc = Math.Min(Model.Trang * Model.KichThuocTrang, Model.TongSo);
+    int trangDau = Math.Max(1, Model.Trang - 2);
+    int trangCuoi = Math.Min(Model.TongTrang, Model.Trang + 2);
+
+    // Mọi link phân trang đều giữ nguyên bộ lọc và thứ tự sắp xếp.
+    string LinkTrang(int soTrang) => Url.Action("Index", "LinhKien", new
+    {
+        area = "",
+        tuKhoa = Model.TuKhoa,
+        danhMucId = Model.DanhMucId,
+        thuongHieuId = Model.ThuongHieuId,
+        giaTu = Model.GiaTu,
+        giaDen = Model.GiaDen,
+        sapXep = Model.SapXep,
+        trang = soTrang
+    }) ?? "/LinhKien";
+}
+
+<style>
+    .mk3-page { background: #f5f8f7; min-height: 75vh; padding-bottom: 70px; }
+    .mk3-banner { background: linear-gradient(115deg, #0a3f38, #0e7666); color: white; padding: 46px 0; }
+    .mk3-banner h1 { font-size: clamp(1.8rem, 3.5vw, 2.7rem); font-weight: 800; }
+    .mk3-banner p { color: #daefea; margin-bottom: 0; }
+    .mk3-filter { background: white; border: 1px solid #e1ebe7; border-radius: 20px; padding: 24px; box-shadow: 0 12px 30px #153e3610; }
+    .mk3-filter h2 { color: #183f36; font-size: 1.15rem; font-weight: 800; }
+    .mk3-filter .form-label { color: #29473f; font-size: .9rem; font-weight: 650; }
+    .mk3-filter .form-control, .mk3-filter .form-select { border-radius: 10px; }
+    .mk3-search-button { background: #0c7564; border-color: #0c7564; font-weight: 700; }
+    .mk3-search-button:hover { background: #095d50; border-color: #095d50; }
+    .mk3-counter { color: #5d7770; }
+    .mk3-card { height: 100%; background: white; border: 1px solid #e1ebe7; border-radius: 18px; overflow: hidden; box-shadow: 0 8px 20px #153e360d; transition: transform .15s, box-shadow .15s; }
+    .mk3-card:hover { transform: translateY(-4px); box-shadow: 0 12px 27px #153e361f; }
+    .mk3-image { height: 210px; position: relative; background: linear-gradient(135deg, #e7f3ef, #d9eae4); display: flex; justify-content: center; align-items: center; }
+    .mk3-image .mk3-placeholder { font-size: 4.8rem; color: #91b6aa; }
+    .mk3-image img { width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; }
+    .mk3-card-body { padding: 20px; }
+    .mk3-code { color: #0b7564; font-size: .75rem; font-weight: 800; letter-spacing: 1px; }
+    .mk3-name { color: #183f36; font-size: 1.12rem; font-weight: 800; min-height: 2.8em; margin-top: 7px; }
+    .mk3-meta { font-size: .85rem; color: #657b74; }
+    .mk3-price { color: #c35b10; font-size: 1.22rem; font-weight: 800; }
+    .mk3-empty { background: #fff; border: 1px dashed #c9ded6; border-radius: 20px; padding: 60px 22px; text-align: center; }
+    .mk3-pagination .page-link { color: #0b7564; }
+    .mk3-pagination .active .page-link { color: white; background: #0b7564; border-color: #0b7564; }
+    @@media (max-width: 991.98px) { .mk3-filter { margin-bottom: 20px; } }
+</style>
+
+<div class="mk3-page">
+    <section class="mk3-banner">
+        <div class="container">
+            <div class="small text-uppercase fw-bold mb-2" style="letter-spacing:2px;color:#d6b65f;">MạchKit / Cửa hàng</div>
+            <h1><i class="bi bi-cpu-fill me-2"></i>Danh sách linh kiện</h1>
+            <p>Khám phá linh kiện điện tử cho học tập, thực hành và lắp ráp mạch.</p>
+        </div>
+    </section>
+
+    <div class="container pt-4 pt-lg-5">
+        <div class="row g-4">
+            <aside class="col-lg-3">
+                <div class="mk3-filter">
+                    <h2 class="mb-4"><i class="bi bi-funnel me-2"></i>Tìm kiếm &amp; bộ lọc</h2>
+                    <form method="get" asp-area="" asp-controller="LinhKien" asp-action="Index">
+                        <div class="mb-3">
+                            <label class="form-label" for="tuKhoa">Tên hoặc mã linh kiện</label>
+                            <input class="form-control" type="search" id="tuKhoa" name="tuKhoa"
+                                   value="@Model.TuKhoa" maxlength="100" placeholder="Ví dụ: LED, LK0004" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="danhMucId">Danh mục</label>
+                            <select class="form-select" id="danhMucId" name="danhMucId">
+                                <option value="">Tất cả danh mục</option>
+                                @foreach (var danhMuc in Model.DanhMucs)
+                                {
+                                    if (Model.DanhMucId == danhMuc.Id)
+                                    {
+                                        <option value="@danhMuc.Id" selected>@danhMuc.TenDanhMuc</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@danhMuc.Id">@danhMuc.TenDanhMuc</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="thuongHieuId">Thương hiệu</label>
+                            <select class="form-select" id="thuongHieuId" name="thuongHieuId">
+                                <option value="">Tất cả thương hiệu</option>
+                                @foreach (var thuongHieu in Model.ThuongHieus)
+                                {
+                                    if (Model.ThuongHieuId == thuongHieu.Id)
+                                    {
+                                        <option value="@thuongHieu.Id" selected>@thuongHieu.TenThuongHieu</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@thuongHieu.Id">@thuongHieu.TenThuongHieu</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label" for="giaTu">Giá từ (đ)</label>
+                                <input class="form-control" id="giaTu" name="giaTu" type="number"
+                                       min="0" step="1" value="@giaTuHienThi" placeholder="0" />
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label" for="giaDen">Giá đến (đ)</label>
+                                <input class="form-control" id="giaDen" name="giaDen" type="number"
+                                       min="0" step="1" value="@giaDenHienThi" placeholder="100000" />
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="sapXep">Sắp xếp</label>
+                            <select class="form-select" name="sapXep" id="sapXep">
+                                <option value="ten_az" selected="@(Model.SapXep == "ten_az")">Tên: A → Z</option>
+                                <option value="ten_za" selected="@(Model.SapXep == "ten_za")">Tên: Z → A</option>
+                                <option value="gia_tang" selected="@(Model.SapXep == "gia_tang")">Giá: thấp → cao</option>
+                                <option value="gia_giam" selected="@(Model.SapXep == "gia_giam")">Giá: cao → thấp</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mk3-search-button w-100 py-2">
+                            <i class="bi bi-search me-1"></i>Áp dụng bộ lọc
+                        </button>
+                        <a asp-area="" asp-controller="LinhKien" asp-action="Index"
+                           class="btn btn-outline-secondary w-100 mt-2">Xóa bộ lọc</a>
+                    </form>
+                </div>
+            </aside>
+
+            <section class="col-lg-9">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                    <div>
+                        <h2 class="h4 fw-bold mb-1" style="color:#173e35;">Sản phẩm đang bán</h2>
+                        <span class="mk3-counter">Hiển thị @batDau–@ketThuc trong tổng số @Model.TongSo linh kiện</span>
+                    </div>
+                    @if (Model.TongTrang > 1)
+                    {
+                        <span class="text-muted small">Trang @Model.Trang / @Model.TongTrang</span>
+                    }
+                </div>
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div asp-validation-summary="All" class="alert alert-warning" role="alert"></div>
+                }
+
+                @if (Model.LinhKiens.Count == 0)
+                {
+                    <div class="mk3-empty">
+                        <i class="bi bi-search display-4 text-secondary"></i>
+                        <h3 class="h5 mt-3">Không tìm thấy linh kiện phù hợp</h3>
+                        <p class="text-muted">Hãy thử từ khóa hoặc khoảng giá khác.</p>
+                        <a asp-area="" asp-controller="LinhKien" asp-action="Index"
+                           class="btn btn-outline-success">Xem tất cả linh kiện</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                        @foreach (var item in Model.LinhKiens)
+                        {
+                            <div class="col">
+                                <article class="mk3-card">
+                                    <div class="mk3-image">
+                                        <span class="mk3-placeholder"><i class="bi bi-cpu"></i></span>
+                                        @if (!string.IsNullOrWhiteSpace(item.HinhAnh))
+                                        {
+                                            <img src="@item.HinhAnh" alt="@item.TenLinhKien" loading="lazy"
+                                                 onerror="this.onerror=null;this.style.display='none';" />
+                                        }
+                                    </div>
+                                    <div class="mk3-card-body">
+                                        <span class="mk3-code">@item.MaLinhKien</span>
+                                        <h3 class="mk3-name">@item.TenLinhKien</h3>
+                                        <div class="mk3-meta mb-2">
+                                            <div><i class="bi bi-grid me-1"></i>@(item.DanhMuc?.TenDanhMuc ?? "Chưa phân loại")</div>
+                                            <div><i class="bi bi-tag me-1"></i>@(item.ThuongHieu?.TenThuongHieu ?? "Chưa có thương hiệu")</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mt-3">
+                                            <span class="mk3-price">@item.Gia.ToString("N0", vi) đ</span>
+                                            @if (item.SoLuongTon > 0)
+                                            {
+                                                <span class="badge text-bg-success">Còn @item.SoLuongTon</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge text-bg-secondary">Hết hàng</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        }
+                    </div>
+                }
+
+                @if (Model.TongTrang > 1)
+                {
+                    <nav class="mt-5" aria-label="Phân trang linh kiện">
+                        <ul class="pagination mk3-pagination justify-content-center flex-wrap gap-1">
+                            @if (Model.Trang > 1)
+                            {
+                                <li class="page-item"><a class="page-link" href="@LinkTrang(Model.Trang - 1)">Trước</a></li>
+                            }
+                            @for (int soTrang = trangDau; soTrang <= trangCuoi; soTrang++)
+                            {
+                                <li class="page-item @(soTrang == Model.Trang ? "active" : "")">
+                                    <a class="page-link" href="@LinkTrang(soTrang)" aria-label="Trang @soTrang"
+                                       aria-current="@(soTrang == Model.Trang ? "page" : null)">@soTrang</a>
+                                </li>
+                            }
+                            @if (Model.Trang < Model.TongTrang)
+                            {
+                                <li class="page-item"><a class="page-link" href="@LinkTrang(Model.Trang + 1)">Sau</a></li>
+                            }
+                        </ul>
+                    </nav>
+                }
+            </section>
+        </div>
+    </div>
+</div>

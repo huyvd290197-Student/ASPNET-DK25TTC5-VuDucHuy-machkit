@@ -935,15 +935,21 @@
                     @foreach (var d in Model.Dong)
                     {
                         string tenThuong = d.LinhKien.Ten.ToLowerInvariant();
+                        string? anhMacDinh =
+                            tenThuong.Contains("led đỏ") ||
+                            tenThuong.Contains("led do")
+                                ? Url.Content("~/images/led-do.jpg")
+                                : tenThuong.Contains("điện trở") ||
+                                tenThuong.Contains("dien tro")
+                                    ? Url.Content("~/images/dien-tro.jpg")
+                                    : tenThuong.Contains("breadboard")
+                                        ? Url.Content("~/images/breadboard.jpg")
+                                        : null;
 
-                        string anh = tenThuong.Contains("led")
-                            ? Url.Content("~/images/led-do.jpg")
-                            : tenThuong.Contains("điện trở") ||
-                              tenThuong.Contains("dien tro")
-                                ? Url.Content("~/images/dien-tro.jpg")
-                                : tenThuong.Contains("breadboard")
-                                    ? Url.Content("~/images/breadboard.jpg")
-                                    : Url.Content("~/images/hero-machkit.jpg");
+                        string? anh =
+                            !string.IsNullOrWhiteSpace(d.LinhKien.HinhAnh)
+                                ? Url.Content(d.LinhKien.HinhAnh)
+                                : anhMacDinh;
 
                         string icon = tenThuong.Contains("led")
                             ? "bi-lightbulb-fill"
@@ -960,9 +966,13 @@
 
                                     <i class="bi @icon"></i>
 
-                                    <img src="@anh"
-                                         alt="@d.LinhKien.Ten"
-                                         onerror="this.style.display='none';" />
+                                    @if (!string.IsNullOrWhiteSpace(anh))
+                                    {
+                                        <img src="@anh"
+                                            alt="@d.LinhKien.Ten"
+                                            loading="lazy"
+                                            onerror="this.style.display='none';" />
+                                    }
 
                                 </div>
 
