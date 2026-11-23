@@ -226,4 +226,4 @@ Commit từng mốc đã kiểm thử, không sửa ngày, không điền hash g
 ```text
 Tuần 04: Hoàn thiện kiểm thử, báo cáo và README
 ```
-**Ngày biên soạn bản tài liệu này:** 23/11/2026. **Trạng thái cuối Tuần 04:** chờ ghi kết quả 4E thực tế vào báo cáo và bảng nghiệm thu.
+**Ngày biên soạn bản tài liệu này:** 23/11/2026. **Trạng thái cuối Tuần 04:**
