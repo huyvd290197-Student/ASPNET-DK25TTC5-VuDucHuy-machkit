@@ -15,6 +15,9 @@ public class DonHang
 {
     public int Id { get; set; }
 
+    // Chống tạo trùng khi gửi lại cùng yêu cầu; đơn cũ có thể để null.
+    public Guid? MaYeuCau { get; set; }
+    
     [Required, StringLength(450)]
     public string NguoiDungId { get; set; } = "";
     public ApplicationUser? NguoiDung { get; set; }

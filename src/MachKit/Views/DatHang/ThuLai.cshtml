@@ -1,0 +1,26 @@
+@model MachKit.ViewModels.DatHangThuLaiViewModel
+@{
+    ViewData["Title"] = "Kiểm tra kết quả đặt hàng";
+}
+<link rel="stylesheet" href="~/css/tuan04-dat-hang.css" asp-append-version="true" />
+<div class="mk-t4-checkout">
+    <div class="container">
+        <section class="mk-t4-panel mx-auto" style="max-width:760px">
+            <h1 class="h3 fw-bold mb-3">Cần kiểm tra lại kết quả yêu cầu</h1>
+            <div class="alert alert-warning" role="alert">@Model.ThongBao</div>
+            <p>
+                Không tạo một yêu cầu mới trong khi chưa xác định kết quả.
+                Nút bên dưới gửi lại <strong>cùng phiếu</strong>; máy chủ kiểm tra mã yêu cầu đã lưu trước khi xử lý.
+            </p>
+            <form asp-area="" asp-controller="DatHang" asp-action="XacNhan"
+                  method="post" asp-antiforgery="true">
+                <input type="hidden" name="PhieuXacNhan" value="@Model.PhieuXacNhan" />
+                <button type="submit" class="btn btn-success">Kiểm tra / gửi lại cùng yêu cầu</button>
+            </form>
+            <p class="small text-muted mt-3 mb-0">
+                Nếu lỗi lặp lại, giữ trang này và kiểm tra Terminal/SQL Server trước.
+                Không gửi phiếu xác nhận, mật khẩu hoặc toàn bộ thông tin người nhận lên GitHub.
+            </p>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+@model MachKit.Models.DonHang
+@using MachKit.Models
+@using System.Globalization
+@{
+    ViewData["Title"] = "Đơn hàng đã tiếp nhận";
+    var vi = CultureInfo.GetCultureInfo("vi-VN");
+    var ngay = new DateTimeOffset(DateTime.SpecifyKind(Model.NgayDatUtc, DateTimeKind.Utc))
+        .ToOffset(TimeSpan.FromHours(7));
+    string trangThai = Model.TrangThai switch
+    {
+        TrangThaiDonHang.ChoXacNhan => "Chờ xác nhận",
+        TrangThaiDonHang.DaXacNhan => "Đã xác nhận",
+        TrangThaiDonHang.DangGiao => "Đang giao",
+        TrangThaiDonHang.HoanThanh => "Hoàn thành",
+        TrangThaiDonHang.DaHuy => "Đã hủy",
+        _ => Model.TrangThai
+    };
+}
+<link rel="stylesheet" href="~/css/tuan04-dat-hang.css" asp-append-version="true" />
+<div class="mk-t4-checkout">
+    <div class="container">
+        <header class="mb-4">
+            <p class="mk-t4-eyebrow mb-2">MẠCHKIT · KẾT QUẢ ĐẶT HÀNG</p>
+            <h1 class="h2 fw-bold">Đơn hàng đã được tiếp nhận</h1>
+            <p class="text-muted mb-0">Thông tin bên dưới được đọc từ đơn đã lưu, không lấy giá hiện tại của sản phẩm.</p>
+        </header>
+        <div class="alert alert-success" role="status">
+            Mã đơn: <strong>MK-@Model.Id.ToString("D6")</strong> · Trạng thái: <strong>@trangThai</strong>.
+            Lần gửi lại cùng yêu cầu sẽ mở lại chính đơn này.
+        </div>
+        <div class="row g-4">
+            <section class="col-lg-5">
+                <div class="mk-t4-panel">
+                    <h2 class="h5 fw-bold mb-3">Thông tin đã lưu</h2>
+                    <dl class="mb-0">
+                        <dt>Thời gian đặt (UTC+7)</dt><dd>@ngay.ToString("dd/MM/yyyy HH:mm:ss")</dd>
+                        <dt>Người nhận</dt><dd>@Model.TenNguoiNhan</dd>
+                        <dt>Điện thoại</dt><dd>@Model.SoDienThoai</dd>
+                        <dt>Địa chỉ</dt><dd class="mk-t4-preline">@Model.DiaChiGiaoHang</dd>
+                        <dt>Ghi chú</dt><dd class="mk-t4-preline">@(Model.GhiChu ?? "Không có")</dd>
+                    </dl>
+                    <p class="text-muted small mb-0">
+                        Đây là xác nhận tiếp nhận đơn, không phải xác nhận thanh toán.
+                        Tổng tiền lưu ở bước này là tiền hàng, chưa bao gồm phí giao hàng.
+                    </p>
+                </div>
+            </section>
+            <section class="col-lg-7">
+                <div class="mk-t4-panel">
+                    <h2 class="h5 fw-bold mb-3">Linh kiện đã đặt</h2>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead><tr><th scope="col">Linh kiện</th><th scope="col">SL</th>
+                                <th scope="col" class="text-end">Đơn giá</th><th scope="col" class="text-end">Thành tiền</th></tr></thead>
+                            <tbody>
+                            @foreach (var dong in Model.ChiTiets.OrderBy(x => x.Id))
+                            {
+                                <tr>
+                                    <td><div class="fw-semibold">@dong.TenLinhKien</div><small class="text-muted">@dong.MaLinhKien</small></td>
+                                    <td>@dong.SoLuong</td>
+                                    <td class="text-end">@dong.DonGia.ToString("N0", vi) đ</td>
+                                    <td class="text-end">@dong.ThanhTien.ToString("N0", vi) đ</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-between gap-2 border-top pt-3">
+                        <strong>Tổng tiền hàng</strong><strong class="mk-t4-price">@Model.TongTien.ToString("N0", vi) đ</strong>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="d-flex gap-2 flex-wrap mt-4">
+            <a asp-area="" asp-controller="LinhKien" asp-action="Index" class="btn btn-success">Tiếp tục chọn linh kiện</a>
+            <a asp-area="" asp-controller="GioHang" asp-action="Index" class="btn btn-outline-secondary">Kiểm tra giỏ hàng</a>
+        </div>
+    </div>
+</div>

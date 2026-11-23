@@ -25,6 +25,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(b);
 
+        b.ApplyConfiguration(new MachKit.Data.Configurations.DonHangYeuCauConfiguration());
         b.ApplyConfiguration(new MachKit.Data.Configurations.GioHangItemConfiguration());
         b.Entity<DanhMuc>().ToTable("DanhMuc");
         b.Entity<ThuongHieu>().ToTable("ThuongHieu");

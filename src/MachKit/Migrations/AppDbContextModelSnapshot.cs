@@ -218,6 +218,9 @@ namespace MachKit.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<Guid?>("MaYeuCau")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("NgayDatUtc")
                         .HasColumnType("datetime2");
 
@@ -246,6 +249,11 @@ namespace MachKit.Migrations
                         .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MaYeuCau")
+                        .IsUnique()
+                        .HasDatabaseName("UX_DonHang_MaYeuCau")
+                        .HasFilter("[MaYeuCau] IS NOT NULL");
 
                     b.HasIndex("NguoiDungId", "NgayDatUtc");
 

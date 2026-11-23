@@ -60,9 +60,13 @@ public class ThongTinNhanHangInput : IValidatableObject
     }
 }
 
-// Chi dung de hien thi; POST action nhan ThongTinNhanHangInput, khong nhan lop nay.
+// Dùng để hiển thị. POST KiemTra chỉ nhận ThongTinNhanHangInput;
+// POST XacNhan chỉ nhận phiếu được máy chủ bảo vệ.
 public class DatHangViewModel : ThongTinNhanHangInput
 {
+    public string? PhieuXacNhan { get; set; }
+    public DateTime? HetHanXacNhanUtc { get; set; }
+
     public GioHangViewModel GioHang { get; set; } = new();
     public decimal TongTien => GioHang.TongTien;
     public bool CoTheXemLai => GioHang.Dongs.Count > 0 && !GioHang.CoCanhBao;
