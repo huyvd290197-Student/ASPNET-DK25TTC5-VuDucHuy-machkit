@@ -1,0 +1,18 @@
+/* Chi ap dung cho trang DatHang. Khong ghi de site.css hay giao dien trang chu. */
+.mk-t4-checkout { padding: 36px 0 64px; background: #f5f8f7; min-height: 70vh; }
+.mk-t4-checkout h1, .mk-t4-checkout h2 { color: #174d42; }
+.mk-t4-checkout .mk-t4-eyebrow { color: #277a67; font-size: .8rem; font-weight: 800; letter-spacing: .12em; }
+.mk-t4-checkout .mk-t4-panel { background: #fff; border: 1px solid #dfe9e4; border-radius: 18px; padding: 26px; box-shadow: 0 10px 26px #174d420b; }
+.mk-t4-checkout .mk-t4-product { display: flex; align-items: flex-start; gap: 12px; padding: 15px 0; border-bottom: 1px solid #e5eeea; }
+.mk-t4-checkout .mk-t4-thumb { width: 64px; height: 64px; flex-shrink: 0; object-fit: contain; border-radius: 10px; background: #f0f5f2; }
+.mk-t4-checkout .mk-t4-price { color: #a94c0b; font-size: 1.25rem; text-align: right; }
+.mk-t4-checkout .mk-t4-preline { white-space: pre-line; overflow-wrap: anywhere; }
+.mk-t4-checkout .form-control { border-radius: 9px; }
+.mk-t4-checkout .field-validation-valid, .mk-t4-checkout .validation-summary-valid { display: none; }
+.mk-t4-checkout .input-validation-error { border-color: #b42318; }
+.mk-t4-checkout .validation-summary-errors ul { margin-bottom: 0; }
+@media (max-width: 575.98px) {
+    .mk-t4-checkout { padding-top: 24px; }
+    .mk-t4-checkout .mk-t4-panel { padding: 18px; }
+    .mk-t4-checkout .mk-t4-thumb { width: 54px; height: 54px; }
+}

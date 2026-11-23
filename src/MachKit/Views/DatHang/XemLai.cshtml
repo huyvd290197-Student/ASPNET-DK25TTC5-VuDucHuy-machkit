@@ -1,0 +1,57 @@
+@model MachKit.ViewModels.DatHangViewModel
+@{
+    ViewData["Title"] = "Xem lại thông tin đặt hàng";
+}
+<link rel="stylesheet" href="~/css/tuan04-dat-hang.css" asp-append-version="true" />
+<div class="mk-t4-checkout">
+    <div class="container">
+        <header class="mb-4">
+            <p class="mk-t4-eyebrow mb-2">MẠCHKIT · XEM LẠI</p>
+            <h1 class="h2 fw-bold">Xem lại thông tin đặt hàng</h1>
+            <p class="text-muted mb-0">Kiểm tra người nhận, số lượng và giá hiện tại trước bước gửi đơn.</p>
+        </header>
+        <div class="alert alert-success" role="status">
+            Thông tin người nhận hợp lệ về định dạng; giỏ hàng đủ điều kiện tại thời điểm kiểm tra.
+            <strong>Đơn hàng chưa được gửi.</strong>
+        </div>
+        <div class="row g-4">
+            <section class="col-lg-7">
+                <div class="mk-t4-panel">
+                    <h2 class="h5 fw-bold mb-4">Người nhận hàng</h2>
+                    <dl class="row mb-4">
+                        <dt class="col-sm-4 mb-2">Họ và tên</dt>
+                        <dd class="col-sm-8 mb-3">@Model.TenNguoiNhan</dd>
+                        <dt class="col-sm-4 mb-2">Điện thoại</dt>
+                        <dd class="col-sm-8 mb-3">@Model.SoDienThoai</dd>
+                        <dt class="col-sm-4 mb-2">Địa chỉ</dt>
+                        <dd class="col-sm-8 mb-3 mk-t4-preline">@Model.DiaChiGiaoHang</dd>
+                        <dt class="col-sm-4 mb-2">Ghi chú</dt>
+                        <dd class="col-sm-8 mb-0 mk-t4-preline">@(Model.GhiChu ?? "Không có")</dd>
+                    </dl>
+                    <div class="alert alert-info">
+                        Chưa tạo mã đơn, chưa thanh toán, chưa trừ tồn và chưa xóa giỏ.
+                        Chức năng xác nhận lưu đơn sẽ được bổ sung ở Chặng 4C.
+                    </div>
+                    <form asp-area="" asp-controller="DatHang" asp-action="SuaThongTin"
+                          method="post" asp-antiforgery="true" class="d-flex flex-wrap gap-2">
+                        @* Chi gui lai thong tin nguoi nhan; san pham/gia LUON doc lai tu database. *@
+                        <input type="hidden" name="TenNguoiNhan" value="@Model.TenNguoiNhan" />
+                        <input type="hidden" name="SoDienThoai" value="@Model.SoDienThoai" />
+                        <input type="hidden" name="DiaChiGiaoHang" value="@Model.DiaChiGiaoHang" />
+                        <input type="hidden" name="GhiChu" value="@Model.GhiChu" />
+                        <button type="submit" class="btn btn-success">Sửa thông tin người nhận</button>
+                        <a asp-area="" asp-controller="GioHang" asp-action="Index"
+                           class="btn btn-outline-secondary">Sửa giỏ hàng</a>
+                    </form>
+                    <p class="text-muted small mt-3 mb-0">
+                        Giá và tồn kho có thể thay đổi sau màn hình này; bước gửi đơn phải kiểm tra lại.
+                        Không cần nhập thông tin thẻ hoặc tài khoản ngân hàng.
+                    </p>
+                </div>
+            </section>
+            <aside class="col-lg-5">
+                <partial name="_TomTatGio" model="Model.GioHang" />
+            </aside>
+        </div>
+    </div>
+</div>

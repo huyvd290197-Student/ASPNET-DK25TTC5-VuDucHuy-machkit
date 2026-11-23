@@ -103,8 +103,23 @@
                 </table>
             </div>
             <div class="text-end mt-3">
-                <div class="text-muted">Tạm tính theo giá hiện tại của các dòng trong giỏ</div>
-                <div class="mk-t3-price">@Model.TongTien.ToString("N0", vi) đ</div>
+                @if (!Model.CoCanhBao)
+                {
+                    <a asp-area=""
+                    asp-controller="DatHang"
+                    asp-action="Index"
+                    class="btn btn-success px-4">
+                        Tiếp tục đặt hàng
+                    </a>
+                }
+                else
+                {
+                    <button type="button"
+                            class="btn btn-secondary"
+                            disabled>
+                        Cần cập nhật giỏ hàng trước
+                    </button>
+                }
             </div>
             <p class="text-muted small mt-3 mb-0">
                 Giỏ hàng được lưu theo tài khoản. Thêm vào giỏ chưa tạo đơn, chưa thanh toán

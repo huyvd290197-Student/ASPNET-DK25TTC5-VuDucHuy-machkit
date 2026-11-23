@@ -1,0 +1,57 @@
+@model MachKit.ViewModels.GioHangViewModel
+@using System.Globalization
+@using MachKit.Helpers
+@{
+    var vi = CultureInfo.GetCultureInfo("vi-VN");
+}
+<section class="mk-t4-panel" aria-labelledby="tomTatTitle">
+    <h2 id="tomTatTitle" class="h5 fw-bold mb-3">Linh kiện trong giỏ</h2>
+    @if (Model.Dongs.Count == 0)
+    {
+        <div class="alert alert-warning">Giỏ hàng đang trống.</div>
+        <a asp-area="" asp-controller="LinhKien" asp-action="Index"
+           class="btn btn-outline-success w-100">Chọn linh kiện</a>
+    }
+    else
+    {
+        @foreach (var dong in Model.Dongs)
+        {
+            var anh = Tuan03HienThiHelper.AnhNoiBo(dong.HinhAnh);
+            <article class="mk-t4-product">
+                @if (anh is not null)
+                {
+                    <img src="@Url.Content(anh)" alt="@dong.TenLinhKien"
+                         class="mk-t4-thumb" loading="lazy"
+                         onerror="this.onerror=null;this.style.display='none';" />
+                }
+                <div class="flex-grow-1">
+                    <div class="fw-semibold">@dong.TenLinhKien</div>
+                    <div class="text-muted small">Mã: @dong.MaLinhKien</div>
+                    <div class="small mt-1">
+                        @dong.SoLuong × @dong.DonGia.ToString("N0", vi) đ
+                    </div>
+                    <div class="fw-bold text-success">@dong.ThanhTien.ToString("N0", vi) đ</div>
+                    <div class="text-muted small">Tồn hiện tại: @Math.Max(0, dong.TonKho)</div>
+                    @if (dong.CanhBao is string canhBao)
+                    {
+                        <div class="text-danger small mt-1">@canhBao</div>
+                    }
+                </div>
+            </article>
+        }
+        <div class="d-flex justify-content-between align-items-center gap-2 pt-3">
+            <span class="fw-bold">Tạm tính tiền hàng</span>
+            <strong class="mk-t4-price">@Model.TongTien.ToString("N0", vi) đ</strong>
+        </div>
+        <p class="small text-muted mt-2 mb-0">
+            Chưa tính phí giao hàng. Giá và tồn kho được đọc lại khi bạn kiểm tra thông tin.
+            Xem lại đơn chưa giữ hàng và chưa trừ tồn kho.
+        </p>
+        @if (Model.CoCanhBao)
+        {
+            <p class="small text-danger mt-2 mb-0">
+                Tạm tính trên bao gồm các dòng đang có cảnh báo; đây không phải số tiền có thể xác nhận đặt hàng.
+            </p>
+        }
+    }
+</section>

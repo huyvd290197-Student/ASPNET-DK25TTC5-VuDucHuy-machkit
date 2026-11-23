@@ -1,0 +1,86 @@
+@model MachKit.ViewModels.DatHangViewModel
+@{
+    ViewData["Title"] = "Thông tin đặt hàng";
+}
+<link rel="stylesheet" href="~/css/tuan04-dat-hang.css" asp-append-version="true" />
+<div class="mk-t4-checkout">
+    <div class="container">
+        <nav aria-label="Đường dẫn" class="small mb-3">
+            <a asp-area="" asp-controller="GioHang" asp-action="Index">Giỏ hàng</a>
+            <span class="mx-2" aria-hidden="true">/</span>
+            <span>Thông tin đặt hàng</span>
+        </nav>
+        <header class="mb-4">
+            <p class="mk-t4-eyebrow mb-2">MẠCHKIT · ĐẶT HÀNG</p>
+            <h1 class="h2 fw-bold">Thông tin người nhận</h1>
+            <p class="text-muted mb-0">Nhập thông tin giao hàng rồi xem lại các linh kiện trong giỏ của bạn.</p>
+        </header>
+        <div class="alert alert-info" role="status">
+            Bước này chỉ kiểm tra và xem lại thông tin, <strong>chưa gửi đơn hàng</strong>.
+        </div>
+        <div class="row g-4">
+            <section class="col-lg-7">
+                <div class="mk-t4-panel">
+                    <h2 class="h5 fw-bold mb-4">Thông tin giao hàng</h2>
+                    <form asp-area="" asp-controller="DatHang" asp-action="KiemTra"
+                          method="post" asp-antiforgery="true">
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+                        }
+                        <div class="mb-3">
+                            <label asp-for="TenNguoiNhan" class="form-label fw-semibold"></label>
+                            <input asp-for="TenNguoiNhan" class="form-control" autocomplete="name"
+                                   maxlength="120" required placeholder="Họ và tên người nhận" />
+                            <span asp-validation-for="TenNguoiNhan" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SoDienThoai" class="form-label fw-semibold"></label>
+                            <input asp-for="SoDienThoai" type="tel" class="form-control" autocomplete="tel"
+                                   maxlength="20" required aria-describedby="dienThoaiHelp"
+                                   placeholder="Nhập số điện thoại liên hệ" />
+                            <div id="dienThoaiHelp" class="form-text">
+                                9–15 chữ số; có thể dùng + ở đầu và ký tự phân cách thông thường.
+                            </div>
+                            <span asp-validation-for="SoDienThoai" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="DiaChiGiaoHang" class="form-label fw-semibold"></label>
+                            <textarea asp-for="DiaChiGiaoHang" class="form-control" rows="3" maxlength="300"
+                                      autocomplete="street-address" required
+                                      placeholder="Số nhà, đường, phường/xã, tỉnh/thành phố"></textarea>
+                            <span asp-validation-for="DiaChiGiaoHang" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label asp-for="GhiChu" class="form-label fw-semibold"></label>
+                            <span class="text-muted small">(không bắt buộc)</span>
+                            <textarea asp-for="GhiChu" class="form-control" rows="3" maxlength="1000"
+                                      placeholder="Lưu ý cho việc giao hàng..."></textarea>
+                            <span asp-validation-for="GhiChu" class="text-danger small"></span>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            @if (Model.CoTheXemLai)
+                            {
+                                <button type="submit" class="btn btn-success px-4">Kiểm tra và xem lại đơn</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-secondary px-4" disabled>
+                                    Cần cập nhật giỏ hàng
+                                </button>
+                            }
+                            <a asp-area="" asp-controller="GioHang" asp-action="Index"
+                               class="btn btn-outline-secondary">Quay lại giỏ hàng</a>
+                        </div>
+                        <p class="small text-muted mt-3 mb-0">
+                            Thông tin người nhận chưa được lưu vào đơn hàng ở bước này.
+                        </p>
+                    </form>
+                </div>
+            </section>
+            <aside class="col-lg-5">
+                <partial name="_TomTatGio" model="Model.GioHang" />
+            </aside>
+        </div>
+    </div>
+</div>
