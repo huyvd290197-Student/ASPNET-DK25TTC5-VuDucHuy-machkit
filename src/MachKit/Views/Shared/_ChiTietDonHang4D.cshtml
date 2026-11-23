@@ -1,0 +1,55 @@
+@model MachKit.ViewModels.DonHangChiTietViewModel
+@using MachKit.Helpers
+<div class="row g-4">
+    <section class="col-lg-5"><div class="mk4d-panel h-100">
+        <h2 class="h5 fw-bold mb-3">Thông tin đơn đã lưu</h2>
+        <dl class="mb-0">
+            <dt>Thời gian đặt (UTC+7)</dt><dd>@DonHang4DHelper.GioVietNam(Model.Don.NgayDatUtc)</dd>
+            <dt>Người nhận</dt><dd>@Model.Don.TenNguoiNhan</dd>
+            <dt>Số điện thoại</dt><dd>@Model.Don.SoDienThoai</dd>
+            <dt>Địa chỉ</dt><dd class="mk4d-preline">@Model.Don.DiaChiGiaoHang</dd>
+            <dt>Ghi chú khi đặt</dt><dd class="mk4d-preline">@(string.IsNullOrWhiteSpace(Model.Don.GhiChu) ? "Không có" : Model.Don.GhiChu)</dd>
+        </dl>
+        <p class="small text-muted mb-0">Trạng thái đơn không phải trạng thái thanh toán. Tiền hàng chưa bao gồm phí giao hàng.</p>
+    </div></section>
+    <section class="col-lg-7"><div class="mk4d-panel h-100">
+        <h2 class="h5 fw-bold mb-3">Linh kiện đã đặt</h2>
+        <div class="table-responsive"><table class="table align-middle">
+            <thead><tr><th scope="col">Linh kiện</th><th scope="col">Số lượng</th>
+                <th scope="col" class="text-end">Đơn giá</th><th scope="col" class="text-end">Thành tiền</th></tr></thead>
+            <tbody>
+            @foreach (var d in Model.Don.ChiTiets.OrderBy(x => x.Id))
+            {
+                <tr><td><strong>@d.TenLinhKien</strong><br /><small class="text-muted">@d.MaLinhKien</small></td>
+                    <td>@d.SoLuong</td><td class="text-end text-nowrap">@DonHang4DHelper.Tien(d.DonGia)</td>
+                    <td class="text-end text-nowrap">@DonHang4DHelper.Tien(d.ThanhTien)</td></tr>
+            }
+            </tbody></table></div>
+        <div class="d-flex justify-content-between gap-2 border-top pt-3"><strong>Tổng tiền hàng</strong>
+            <strong class="mk4d-price">@DonHang4DHelper.Tien(Model.Don.TongTien)</strong></div>
+        <p class="small text-muted mt-2 mb-0">Tên, mã và đơn giá được giữ tại thời điểm đặt; không lấy giá hiện tại của sản phẩm.</p>
+    </div></section>
+</div>
+<section class="mk4d-panel mt-4">
+    <h2 class="h5 fw-bold">Nhật ký trạng thái</h2>
+    <p class="text-muted small">Nhật ký được ghi từ khi cài Chặng 4D. Hệ thống không tạo lại các mốc cũ không có dữ liệu.</p>
+    @if (Model.LichSu.Count == 0)
+    { <p class="mb-0">Chưa có lần cập nhật trạng thái được ghi nhận.</p> }
+    else
+    {
+        <ol class="mk4d-timeline">
+        @foreach (var item in Model.LichSu)
+        {
+            <li><div class="small text-muted">@DonHang4DHelper.GioVietNam(item.ThoiDiemUtc) (UTC+7)</div>
+                <strong>@DonHang4DHelper.TenTrangThai(item.TrangThaiCu) → @DonHang4DHelper.TenTrangThai(item.TrangThaiMoi)</strong>
+                @if (Model.LaQuanTri)
+                {
+                    <div class="small mt-1">Thực hiện bởi: @item.NguoiThucHien</div>
+                    <div class="mk4d-preline small">@(item.GhiChu ?? "Không có ghi chú nội bộ")</div>
+                    @if (item.DaHoanTon) { <div class="small text-success">Đã hoàn tồn trong cùng giao dịch hủy.</div> }
+                }
+            </li>
+        }
+        </ol>
+    }
+</section>

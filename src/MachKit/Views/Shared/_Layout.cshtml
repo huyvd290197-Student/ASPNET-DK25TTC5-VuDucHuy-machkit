@@ -83,7 +83,29 @@
                                 Giỏ hàng
                             </a>
                         </li>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link"
+                            asp-area=""
+                            asp-controller="DonHangCuaToi"
+                            asp-action="Index">
+                                Đơn hàng của tôi
+                            </a>
+                        </li>
+                    }
 
+                    @if (User.IsInRole("Admin") || User.IsInRole("NhanVien"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link"
+                            asp-area="Admin"
+                            asp-controller="DonHang"
+                            asp-action="Index">
+                                Quản lý đơn hàng
+                            </a>
+                        </li>
+                    }
                     </ul>
 
                     <partial name="_LoginPartial" />

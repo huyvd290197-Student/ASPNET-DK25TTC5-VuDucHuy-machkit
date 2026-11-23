@@ -1,0 +1,60 @@
+@model MachKit.ViewModels.DonHangDanhSachViewModel
+@using MachKit.Helpers
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Đơn hàng của tôi";
+    int first = Math.Max(1, Model.Trang - 2);
+    int last = Math.Min(Model.TongTrang, Model.Trang + 2);
+    string PageUrl(int p) => Url.Action("Index", "DonHangCuaToi", new
+        { area = "", trangThai = Model.TrangThai, trang = p }) ?? "#";
+}
+<link rel="stylesheet" href="~/css/tuan04-don-hang.css" asp-append-version="true" />
+<div class="mk4d"><div class="container py-4 py-lg-5">
+    <header class="mb-4"><p class="mk4d-eyebrow">MẠCHKIT · TÀI KHOẢN CỦA BẠN</p>
+        <h1 class="h2 fw-bold">Đơn hàng của tôi</h1>
+        <p class="text-muted mb-0">Theo dõi các đơn đã đặt bằng tài khoản đang đăng nhập.</p></header>
+    <section class="mk4d-panel mb-4">
+        <form method="get" asp-area="" asp-controller="DonHangCuaToi" asp-action="Index" class="row g-3 align-items-end">
+            <div class="col-md-6"><label class="form-label" for="trangThai">Trạng thái</label>
+                <select class="form-select" name="trangThai" id="trangThai"><option value="">Tất cả</option>
+                    @foreach (var s in DonHang4DHelper.TatCa)
+                    { <option value="@s" selected="@(Model.TrangThai == s)">@DonHang4DHelper.TenTrangThai(s)</option> }
+                </select></div>
+            <div class="col-md-6 d-flex gap-2"><button type="submit" class="btn btn-success">Lọc đơn</button>
+                <a asp-area="" asp-controller="DonHangCuaToi" asp-action="Index" class="btn btn-outline-secondary">Xóa lọc</a></div>
+        </form>
+    </section>
+    <div class="d-flex justify-content-between mb-3"><span>@Model.TongSo đơn phù hợp</span>
+        @if (Model.TongSo > 0) { <span class="text-muted">Trang @Model.Trang / @Model.TongTrang</span> }</div>
+    @if (Model.Dons.Count == 0)
+    {
+        <section class="mk4d-panel text-center py-5"><h2 class="h5">Chưa có đơn phù hợp</h2>
+            <p class="text-muted">Giỏ hàng chưa xác nhận ở 4C không phải đơn đã đặt.</p>
+            <a asp-area="" asp-controller="LinhKien" asp-action="Index" class="btn btn-success">Xem linh kiện</a></section>
+    }
+    else
+    {
+        <div class="row g-3">
+        @foreach (var d in Model.Dons)
+        {
+            <div class="col-lg-6"><article class="mk4d-panel h-100">
+                <div class="d-flex justify-content-between flex-wrap gap-2 mb-3"><h2 class="h5 mb-0">@DonHang4DHelper.MaDon(d.Id)</h2>
+                    <span class="mk4d-badge @DonHang4DHelper.LopTrangThai(d.TrangThai)">@DonHang4DHelper.TenTrangThai(d.TrangThai)</span></div>
+                <p class="small text-muted mb-2">@DonHang4DHelper.GioVietNam(d.NgayDatUtc) (UTC+7)</p>
+                <p class="mb-3">Người nhận: @d.TenNguoiNhan · @d.SoLoai loại linh kiện</p>
+                <div class="d-flex justify-content-between align-items-center gap-2"><strong class="mk4d-price">@DonHang4DHelper.Tien(d.TongTien)</strong>
+                    <a asp-area="" asp-controller="DonHangCuaToi" asp-action="ChiTiet" asp-route-id="@d.Id" class="btn btn-outline-success">Xem chi tiết</a></div>
+            </article></div>
+        }
+        </div>
+    }
+    @if (Model.TongTrang > 1)
+    {
+        <nav class="mt-4" aria-label="Phân trang đơn của tôi"><ul class="pagination flex-wrap justify-content-center">
+            @if (Model.Trang > 1) { <li class="page-item"><a class="page-link" href="@PageUrl(Model.Trang - 1)">Trước</a></li> }
+            @for (int p = first; p <= last; p++)
+            { <li class="page-item @(p == Model.Trang ? "active" : "")"><a class="page-link" href="@PageUrl(p)" aria-current="@(p == Model.Trang ? "page" : null)">@p</a></li> }
+            @if (Model.Trang < Model.TongTrang) { <li class="page-item"><a class="page-link" href="@PageUrl(Model.Trang + 1)">Sau</a></li> }
+        </ul></nav>
+    }
+</div></div>

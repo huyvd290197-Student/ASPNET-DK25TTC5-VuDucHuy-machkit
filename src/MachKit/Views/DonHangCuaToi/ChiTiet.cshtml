@@ -1,0 +1,20 @@
+@model MachKit.ViewModels.DonHangChiTietViewModel
+@using MachKit.Helpers
+@using MachKit.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Đơn " + DonHang4DHelper.MaDon(Model.Don.Id);
+}
+<link rel="stylesheet" href="~/css/tuan04-don-hang.css" asp-append-version="true" />
+<div class="mk4d"><div class="container py-4 py-lg-5">
+    <header class="d-flex justify-content-between flex-wrap gap-3 mb-4">
+        <div><p class="mk4d-eyebrow">MẠCHKIT · ĐƠN HÀNG CỦA TÔI</p>
+            <h1 class="h2 fw-bold">@DonHang4DHelper.MaDon(Model.Don.Id)</h1>
+            <span class="mk4d-badge @DonHang4DHelper.LopTrangThai(Model.Don.TrangThai)">@DonHang4DHelper.TenTrangThai(Model.Don.TrangThai)</span></div>
+        <a asp-area="" asp-controller="DonHangCuaToi" asp-action="Index" class="btn btn-outline-secondary align-self-start">Tất cả đơn của tôi</a>
+    </header>
+    @if (Model.Don.TrangThai == TrangThaiDonHang.DaHuy)
+    { <div class="alert alert-secondary">Đơn đã hủy. Số tiền bên dưới giữ để tra cứu lịch sử, không phải thông báo đã thu hoặc hoàn tiền.</div> }
+    <partial name="~/Views/Shared/_ChiTietDonHang4D.cshtml" model="Model" />
+    <p class="text-muted small mt-3">Chặng 4D cho phép theo dõi đơn. Các thao tác xử lý hoặc hủy trước giao do quản trị viên/nhân viên thực hiện; chưa có chức năng tự hủy ở trang khách.</p>
+</div></div>

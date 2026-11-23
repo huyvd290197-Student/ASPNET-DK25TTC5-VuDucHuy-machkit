@@ -24,6 +24,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<MachKit.Services.GioHangService>();
 builder.Services.AddDataProtection();
 builder.Services.AddScoped<MachKit.Services.DatHangService>();
+builder.Services.AddScoped<MachKit.Services.DonHangQuanLyService>();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

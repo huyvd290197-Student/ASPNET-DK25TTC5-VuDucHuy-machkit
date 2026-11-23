@@ -1,0 +1,70 @@
+@model MachKit.ViewModels.DonHangDanhSachViewModel
+@using MachKit.Helpers
+@{
+    ViewData["Title"] = "Quản lý đơn hàng";
+    int first = Math.Max(1, Model.Trang - 2);
+    int last = Math.Min(Model.TongTrang, Model.Trang + 2);
+    string PageUrl(int p) => Url.Action("Index", "DonHang", new
+        { area = "Admin", tuKhoa = Model.TuKhoa, trangThai = Model.TrangThai, trang = p }) ?? "#";
+}
+<link rel="stylesheet" href="~/css/tuan04-don-hang.css" asp-append-version="true" />
+<div class="mk4d">
+    <div class="container py-4 py-lg-5">
+        <header class="d-flex justify-content-between flex-wrap gap-3 mb-4">
+            <div><p class="mk4d-eyebrow">MẠCHKIT · QUẢN TRỊ</p>
+                <h1 class="h2 fw-bold">Quản lý đơn hàng</h1>
+                <p class="text-muted mb-0">Tìm đơn, kiểm tra chi tiết và xử lý từng trạng thái.</p></div>
+            <a href="@Url.Content("~/Admin")" class="btn btn-outline-secondary align-self-start">Về khu quản trị</a>
+        </header>
+        <section class="mk4d-panel mb-4" aria-label="Bộ lọc đơn hàng">
+            <form method="get" asp-area="Admin" asp-controller="DonHang" asp-action="Index" class="row g-3 align-items-end">
+                <div class="col-lg-6"><label class="form-label" for="tuKhoa">Mã đơn, tên người nhận hoặc số điện thoại</label>
+                    <input class="form-control" id="tuKhoa" name="tuKhoa" value="@Model.TuKhoa" maxlength="100" placeholder="Ví dụ: MK-000001" /></div>
+                <div class="col-lg-3"><label class="form-label" for="trangThai">Trạng thái</label>
+                    <select class="form-select" id="trangThai" name="trangThai"><option value="">Tất cả</option>
+                        @foreach (var s in DonHang4DHelper.TatCa)
+                        { <option value="@s" selected="@(Model.TrangThai == s)">@DonHang4DHelper.TenTrangThai(s)</option> }
+                    </select></div>
+                <div class="col-lg-3 d-flex gap-2"><button type="submit" class="btn btn-success">Tìm / Lọc</button>
+                    <a asp-area="Admin" asp-controller="DonHang" asp-action="Index" class="btn btn-outline-secondary">Xóa lọc</a></div>
+            </form>
+        </section>
+        <div class="d-flex justify-content-between mb-3"><span>@Model.TongSo đơn phù hợp</span>
+            @if (Model.TongSo > 0) { <span class="text-muted">Trang @Model.Trang / @Model.TongTrang</span> }</div>
+        <section class="mk4d-panel">
+        @if (Model.Dons.Count == 0)
+        {
+            <p class="text-muted mb-0">Không tìm thấy đơn phù hợp. Đơn từ bước đặt hàng 4C sẽ xuất hiện tại đây.</p>
+        }
+        else
+        {
+            <div class="table-responsive"><table class="table align-middle mk4d-table">
+                <thead><tr><th scope="col">Mã đơn</th><th scope="col">Thời gian (UTC+7)</th><th scope="col">Người nhận</th>
+                    <th scope="col">Tiền hàng</th><th scope="col">Trạng thái</th><th scope="col">Xử lý</th></tr></thead>
+                <tbody>
+                @foreach (var d in Model.Dons)
+                {
+                    <tr><td class="fw-bold">@DonHang4DHelper.MaDon(d.Id)</td>
+                        <td>@DonHang4DHelper.GioVietNam(d.NgayDatUtc)</td>
+                        <td><div>@d.TenNguoiNhan</div><small class="text-muted">@d.SoDienThoai</small></td>
+                        <td class="text-nowrap">@DonHang4DHelper.Tien(d.TongTien)<br /><small class="text-muted">@d.SoLoai loại linh kiện</small></td>
+                        <td><span class="mk4d-badge @DonHang4DHelper.LopTrangThai(d.TrangThai)">@DonHang4DHelper.TenTrangThai(d.TrangThai)</span></td>
+                        <td><a asp-area="Admin" asp-controller="DonHang" asp-action="ChiTiet" asp-route-id="@d.Id" class="btn btn-sm btn-outline-success">Chi tiết</a></td></tr>
+                }
+                </tbody></table></div>
+        }
+        </section>
+        @if (Model.TongTrang > 1)
+        {
+            <nav class="mt-4" aria-label="Phân trang đơn hàng quản trị"><ul class="pagination flex-wrap justify-content-center">
+                @if (Model.Trang > 1) { <li class="page-item"><a class="page-link" href="@PageUrl(Model.Trang - 1)">Trước</a></li> }
+                @for (int p = first; p <= last; p++)
+                {
+                    <li class="page-item @(p == Model.Trang ? "active" : "")"><a class="page-link" href="@PageUrl(p)"
+                        aria-current="@(p == Model.Trang ? "page" : null)">@p</a></li>
+                }
+                @if (Model.Trang < Model.TongTrang) { <li class="page-item"><a class="page-link" href="@PageUrl(Model.Trang + 1)">Sau</a></li> }
+            </ul></nav>
+        }
+    </div>
+</div>

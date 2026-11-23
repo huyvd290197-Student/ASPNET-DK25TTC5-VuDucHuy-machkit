@@ -1,0 +1,24 @@
+@model MachKit.ViewModels.CapNhatDonHangThuLaiViewModel
+@using MachKit.Helpers
+@{
+    ViewData["Title"] = "Kiểm tra kết quả xử lý đơn";
+}
+<link rel="stylesheet" href="~/css/tuan04-don-hang.css" asp-append-version="true" />
+<div class="mk4d"><div class="container py-5"><div class="mk4d-panel">
+    <p class="mk4d-eyebrow">MẠCHKIT · KIỂM TRA KẾT QUẢ</p>
+    <h1 class="h3">Chưa xác định được kết quả thao tác</h1>
+    <div class="alert alert-warning" role="alert">@Model.ThongBao</div>
+    <p><strong>@DonHang4DHelper.MaDon(Model.YeuCau.Id)</strong>:
+        @DonHang4DHelper.TenTrangThai(Model.YeuCau.TrangThaiCu) → @DonHang4DHelper.TenTrangThai(Model.YeuCau.TrangThaiMoi)</p>
+    <p class="text-muted">Không sửa trực tiếp trạng thái hoặc tồn trong SQL Server để xử lý lỗi này. Khi kết nối hoạt động lại, gửi cùng mã thao tác để đối chiếu nhật ký.</p>
+    <form method="post" asp-area="Admin" asp-controller="DonHang" asp-action="CapNhatTrangThai" asp-antiforgery="true">
+        <input type="hidden" name="Id" value="@Model.YeuCau.Id" />
+        <input type="hidden" name="MaThaoTac" value="@Model.YeuCau.MaThaoTac" />
+        <input type="hidden" name="TrangThaiCu" value="@Model.YeuCau.TrangThaiCu" />
+        <input type="hidden" name="TrangThaiMoi" value="@Model.YeuCau.TrangThaiMoi" />
+        <input type="hidden" name="GhiChu" value="@Model.YeuCau.GhiChu" />
+        <button type="submit" class="btn btn-success">Kiểm tra / gửi lại cùng thao tác</button>
+        <a asp-area="Admin" asp-controller="DonHang" asp-action="ChiTiet" asp-route-id="@Model.YeuCau.Id"
+           class="btn btn-outline-secondary ms-2">Xem trạng thái hiện tại</a>
+    </form>
+</div></div></div>

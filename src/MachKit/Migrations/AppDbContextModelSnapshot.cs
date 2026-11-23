@@ -301,6 +301,66 @@ namespace MachKit.Migrations
                         });
                 });
 
+            modelBuilder.Entity("MachKit.Models.LichSuTrangThaiDonHang", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("DaHoanTon")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("DonHangId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GhiChu")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid>("MaThaoTac")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NguoiThucHienId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ThoiDiemUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TrangThaiCu")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("TrangThaiMoi")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DonHangId")
+                        .IsUnique()
+                        .HasDatabaseName("UX_LichSuDonHang_HuyMotLan")
+                        .HasFilter("[TrangThaiMoi] = N'DaHuy'");
+
+                    b.HasIndex("MaThaoTac")
+                        .IsUnique()
+                        .HasDatabaseName("UX_LichSuDonHang_MaThaoTac");
+
+                    b.HasIndex("NguoiThucHienId");
+
+                    b.HasIndex("DonHangId", "ThoiDiemUtc", "Id");
+
+                    b.ToTable("LichSuTrangThaiDonHang", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_LichSuDonHang_HoanTon", "([TrangThaiMoi] = N'DaHuy' AND [DaHoanTon] = 1) OR ([TrangThaiMoi] <> N'DaHuy' AND [DaHoanTon] = 0)");
+                        });
+                });
+
             modelBuilder.Entity("MachKit.Models.LinhKien", b =>
                 {
                     b.Property<int>("Id")
@@ -635,6 +695,25 @@ namespace MachKit.Migrations
                     b.Navigation("LinhKien");
 
                     b.Navigation("NguoiDung");
+                });
+
+            modelBuilder.Entity("MachKit.Models.LichSuTrangThaiDonHang", b =>
+                {
+                    b.HasOne("MachKit.Models.DonHang", "DonHang")
+                        .WithMany()
+                        .HasForeignKey("DonHangId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MachKit.Models.ApplicationUser", "NguoiThucHien")
+                        .WithMany()
+                        .HasForeignKey("NguoiThucHienId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DonHang");
+
+                    b.Navigation("NguoiThucHien");
                 });
 
             modelBuilder.Entity("MachKit.Models.LinhKien", b =>

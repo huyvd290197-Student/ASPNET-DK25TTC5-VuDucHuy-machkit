@@ -1,0 +1,22 @@
+/* Chỉ tác động các trang mới có class mk4d; không sửa site.css/trang chủ. */
+.mk4d { background: #f5f8f7; color: #193d35; min-height: 70vh; }
+.mk4d .mk4d-eyebrow { color: #117663; font-size: .78rem; letter-spacing: .12em; font-weight: 800; margin-bottom: .5rem; }
+.mk4d .mk4d-panel { background: white; border: 1px solid #dfe9e4; border-radius: 16px; padding: 24px; box-shadow: 0 8px 26px #163d3509; }
+.mk4d .mk4d-badge { display: inline-block; padding: 6px 11px; border-radius: 24px; font-size: .82rem; font-weight: 700; white-space: nowrap; }
+.mk4d .mk4d-wait { background: #fff1c9; color: #765600; }
+.mk4d .mk4d-confirm { background: #dcecff; color: #174a78; }
+.mk4d .mk4d-ship { background: #ebe2fc; color: #5a3291; }
+.mk4d .mk4d-done { background: #d9f1e4; color: #175739; }
+.mk4d .mk4d-cancel { background: #f8dfdf; color: #883a3a; }
+.mk4d .mk4d-price { color: #b65316; font-size: 1.18rem; }
+.mk4d .mk4d-preline { white-space: pre-line; overflow-wrap: anywhere; }
+.mk4d dt { font-size: .85rem; color: #60746c; margin-bottom: 3px; }
+.mk4d dd { margin-bottom: 15px; overflow-wrap: anywhere; }
+.mk4d .mk4d-table th { font-size: .85rem; color: #60746c; }
+.mk4d .mk4d-timeline { padding-left: 22px; margin: 0; }
+.mk4d .mk4d-timeline li { padding: 0 0 18px 8px; overflow-wrap: anywhere; }
+.mk4d .mk4d-timeline li:last-child { padding-bottom: 0; }
+.mk4d .page-link { color: #116a59; }
+.mk4d .active > .page-link { background: #116a59; border-color: #116a59; color: white; }
+.mk4d .validation-summary-valid { display: none; }
+@media (max-width: 575.98px) { .mk4d .mk4d-panel { padding: 18px; } }

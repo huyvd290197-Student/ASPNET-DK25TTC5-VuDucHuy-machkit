@@ -1,0 +1,53 @@
+@model MachKit.ViewModels.DonHangChiTietViewModel
+@using MachKit.Helpers
+@{
+    ViewData["Title"] = "Xử lý " + DonHang4DHelper.MaDon(Model.Don.Id);
+    var next = DonHang4DHelper.BuocTiepTheo(Model.Don.TrangThai);
+}
+<link rel="stylesheet" href="~/css/tuan04-don-hang.css" asp-append-version="true" />
+<div class="mk4d"><div class="container py-4 py-lg-5">
+    <header class="d-flex justify-content-between flex-wrap gap-3 mb-4">
+        <div><p class="mk4d-eyebrow">MẠCHKIT · XỬ LÝ ĐƠN HÀNG</p>
+            <h1 class="h2 fw-bold">@DonHang4DHelper.MaDon(Model.Don.Id)</h1>
+            <span class="mk4d-badge @DonHang4DHelper.LopTrangThai(Model.Don.TrangThai)">@DonHang4DHelper.TenTrangThai(Model.Don.TrangThai)</span></div>
+        <a asp-area="Admin" asp-controller="DonHang" asp-action="Index" class="btn btn-outline-secondary align-self-start">Danh sách đơn</a>
+    </header>
+    @if (TempData["DonHang4DThanhCong"] is string ok) { <div class="alert alert-success" role="status">@ok</div> }
+    @if (TempData["DonHang4DLoi"] is string err) { <div class="alert alert-warning" role="alert">@err</div> }
+    <div asp-validation-summary="All" class="text-danger mb-3" role="alert"></div>
+    <partial name="~/Views/Shared/_ChiTietDonHang4D.cshtml" model="Model" />
+    <section class="mk4d-panel mt-4">
+        <h2 class="h5 fw-bold mb-3">Cập nhật trạng thái</h2>
+        @if (!Model.DonTu4C)
+        {
+            <div class="alert alert-warning mb-0">Đơn thiếu MaYeuCau của 4C, chỉ cho xem. Không tự thêm mã hoặc hoàn tồn vì chưa biết đơn cũ đã trừ kho hay chưa.</div>
+        }
+        else if (next.Length == 0)
+        {
+            <p class="mb-0">Đơn ở trạng thái kết thúc hoặc không nhận diện. Không mở lại, sửa trạng thái hoặc hủy thêm.</p>
+        }
+        else
+        {
+            <form method="post" asp-area="Admin" asp-controller="DonHang" asp-action="CapNhatTrangThai" asp-antiforgery="true"
+                  onsubmit="return this.elements['TrangThaiMoi'].value !== 'DaHuy' || confirm('Hủy đơn trước giao và hoàn tồn? Thao tác hủy không được đảo lại trong Chặng 4D.');">
+                <input type="hidden" name="Id" value="@Model.Don.Id" />
+                <input type="hidden" name="TrangThaiCu" value="@Model.CapNhat.TrangThaiCu" />
+                <input type="hidden" name="MaThaoTac" value="@Model.CapNhat.MaThaoTac" />
+                <div class="row g-3">
+                    <div class="col-lg-4"><label for="TrangThaiMoi" class="form-label">Trạng thái mới</label>
+                        <select class="form-select" id="TrangThaiMoi" name="TrangThaiMoi" required>
+                            <option value="">Chọn trạng thái...</option>
+                            @foreach (var s in next)
+                            { <option value="@s" selected="@(Model.CapNhat.TrangThaiMoi == s)">@DonHang4DHelper.TenTrangThai(s)</option> }
+                        </select></div>
+                    <div class="col-lg-8"><label for="GhiChu" class="form-label">Ghi chú nội bộ / lý do hủy</label>
+                        <textarea class="form-control" id="GhiChu" name="GhiChu" rows="3" maxlength="500">@Model.CapNhat.GhiChu</textarea>
+                        <div class="form-text">Hủy đơn cần lý do 5–500 ký tự. Ghi chú nội bộ không hiển thị cho khách.</div></div>
+                </div>
+                <div class="alert alert-light border mt-3 mb-3">Duyệt / giao / hoàn thành không trừ tồn lần nữa. Chỉ hủy khi Chờ xác nhận hoặc Đã xác nhận; hoàn tồn cùng giao dịch, không phục hồi giỏ và không hoàn tiền tự động.</div>
+                <button type="submit" class="btn btn-success">Lưu trạng thái</button>
+                <a asp-area="Admin" asp-controller="DonHang" asp-action="ChiTiet" asp-route-id="@Model.Don.Id" class="btn btn-outline-secondary ms-2">Tải lại trạng thái</a>
+            </form>
+        }
+    </section>
+</div></div>
