@@ -125,6 +125,51 @@ namespace MachKit.Migrations
                     b.ToTable("BoThucHanh", (string)null);
                 });
 
+            modelBuilder.Entity("MachKit.Models.ChiTietDonHang", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("DonGia")
+                        .HasPrecision(18)
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<int>("DonHangId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LinhKienId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MaLinhKien")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("SoLuong")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenLinhKien")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<decimal>("ThanhTien")
+                        .HasPrecision(18)
+                        .HasColumnType("decimal(18,0)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LinhKienId");
+
+                    b.HasIndex("DonHangId", "LinhKienId")
+                        .IsUnique();
+
+                    b.ToTable("ChiTietDonHang", (string)null);
+                });
+
             modelBuilder.Entity("MachKit.Models.DanhMuc", b =>
                 {
                     b.Property<int>("Id")
@@ -154,6 +199,57 @@ namespace MachKit.Migrations
                     b.HasIndex("DanhMucChaId");
 
                     b.ToTable("DanhMuc", (string)null);
+                });
+
+            modelBuilder.Entity("MachKit.Models.DonHang", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DiaChiGiaoHang")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("GhiChu")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("NgayDatUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NguoiDungId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SoDienThoai")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("TenNguoiNhan")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<decimal>("TongTien")
+                        .HasPrecision(18)
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<string>("TrangThai")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NguoiDungId", "NgayDatUtc");
+
+                    b.ToTable("DonHang", (string)null);
                 });
 
             modelBuilder.Entity("MachKit.Models.LinhKien", b =>
@@ -433,6 +529,25 @@ namespace MachKit.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("MachKit.Models.ChiTietDonHang", b =>
+                {
+                    b.HasOne("MachKit.Models.DonHang", "DonHang")
+                        .WithMany("ChiTiets")
+                        .HasForeignKey("DonHangId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MachKit.Models.LinhKien", "LinhKien")
+                        .WithMany()
+                        .HasForeignKey("LinhKienId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DonHang");
+
+                    b.Navigation("LinhKien");
+                });
+
             modelBuilder.Entity("MachKit.Models.DanhMuc", b =>
                 {
                     b.HasOne("MachKit.Models.DanhMuc", "DanhMucCha")
@@ -441,6 +556,17 @@ namespace MachKit.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("DanhMucCha");
+                });
+
+            modelBuilder.Entity("MachKit.Models.DonHang", b =>
+                {
+                    b.HasOne("MachKit.Models.ApplicationUser", "NguoiDung")
+                        .WithMany()
+                        .HasForeignKey("NguoiDungId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("NguoiDung");
                 });
 
             modelBuilder.Entity("MachKit.Models.LinhKien", b =>
@@ -553,6 +679,11 @@ namespace MachKit.Migrations
                     b.Navigation("DanhMucCons");
 
                     b.Navigation("LinhKiens");
+                });
+
+            modelBuilder.Entity("MachKit.Models.DonHang", b =>
+                {
+                    b.Navigation("ChiTiets");
                 });
 
             modelBuilder.Entity("MachKit.Models.LinhKien", b =>
