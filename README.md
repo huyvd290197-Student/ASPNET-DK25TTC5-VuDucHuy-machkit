@@ -1,7 +1,7 @@
-# MạchKit – Website bán linh kiện điện tử theo bộ thực hành
+﻿# MạchKit – Website bán linh kiện điện tử theo bộ thực hành
 
 > **Đề tài:** Xây dựng website bán linh kiện điện tử hỗ trợ mua theo bộ thực hành  
-> **Tiến độ cập nhật:** Đang bổ sung Chặng 3B–3D của Tuần 03; bảo toàn Chặng 4A đã hoàn thành  
+> **Tiến độ cập nhật:** Tuần 04 — 4A–4D hoàn thành theo xác nhận của sinh viên; đang chốt nghiệm thu 4E  
 > **Hạn hoàn thành đồ án:** 15/12/2026
 
 ## 1. Thông tin sinh viên
@@ -74,151 +74,156 @@ Repository có `global.json` để cố định phiên bản .NET SDK phù hợp
 
 [Báo cáo tiến độ Tuần 02](progress-report/Tuan-02.md)
 
-### Tuần 03 (16/11–22/11/2026) – Hoàn thiện trang khách hàng và giỏ hàng
 
-**Đính chính ngày 23/11/2026:** 11 bước đã hoàn thành là **11 bước của Chặng 3A**, không phải toàn bộ Tuần 03. Các chặng 3B–3D được bổ sung sau khi rà soát. Không xem tài liệu này là bằng chứng kiểm thử tự động.
+### Tuần 03 (16/11–22/11/2026) — Trang khách và giỏ hàng
 
-| Chặng | Phạm vi | Trạng thái lúc cập nhật |
+Sinh viên đã xác nhận hoàn thành đầy đủ 3A–3D sau khi bổ sung các chặng còn thiếu. Việc trước đây nhầm 11 bước của 3A với toàn Tuần 03 đã được đính chính; không dùng bản ghi nhận cũ làm kết luận tiến độ hiện tại.
+
+| Chặng | Phạm vi đã triển khai | Trạng thái ghi nhận |
 |---|---|---|
-| 3A | Danh sách từ SQL Server; tìm tên/mã; lọc danh mục, thương hiệu, giá; sắp xếp và phân trang | Đã hoàn thành theo xác nhận của sinh viên |
-| 3B | Chi tiết theo slug; ảnh, giá, tồn, mô tả, thông số, datasheet, sản phẩm liên quan | Có mã bổ sung; chờ áp dụng và kiểm thử |
-| 3C | Giỏ hàng SQL Server theo tài khoản; thêm/cập nhật/xóa; chặn vượt tồn | Có mã bổ sung; chờ migration và kiểm thử |
-| 3D | Chương 2, báo cáo Tuần 03 và README duy nhất | Có bản nháp; chờ rà soát và Push |
+| 3A | Danh sách SQL Server; tìm tên/mã; lọc danh mục, thương hiệu, giá; sắp xếp; phân trang giữ bộ lọc | Hoàn thành theo xác nhận của sinh viên |
+| 3B | Chi tiết theo slug; ảnh riêng, giá, tồn, mô tả, thông số, datasheet, sản phẩm liên quan | Hoàn thành theo xác nhận của sinh viên |
+| 3C | Giỏ `GioHangItem` theo tài khoản; thêm/cập nhật/xóa; kiểm tra số lượng và tồn | Hoàn thành theo xác nhận của sinh viên |
+| 3D | Báo cáo Tuần 03, Chương 2, cập nhật README chung | Hoàn thành theo xác nhận của sinh viên |
 
-Chỉ đổi trạng thái 3B/3C/3D thành **Hoàn thành – đã kiểm thử/đã rà soát** sau khi thực hiện đúng các bước tương ứng. Ghi kết quả thực tế vào [báo cáo Tuần 03](progress-report/Tuan-03.md).
+Giỏ lưu trong SQL Server, không chuyển sang Session. Giá trong giỏ là giá hiện tại. Thêm vào giỏ chưa giữ/trừ tồn và chưa tạo đơn.
 
-Phần bổ sung dùng `LinhKienChiTietController` cho chi tiết và `GioHangService` cho xử lý giỏ. Bảng `GioHangItem` lưu một dòng cho mỗi cặp tài khoản – linh kiện. Tổng tiền trong giỏ tính từ giá hiện tại trong database; giỏ chưa giữ/trừ tồn và chưa tạo đơn hàng.
+Tài liệu: [Báo cáo Tuần 03](progress-report/Tuan-03.md) · [Chương 2](thesis/doc/Chuong-2-Nghien-cuu-ly-thuyet.md).
 
-[Bản nháp Chương 2 – Nghiên cứu lý thuyết](thesis/doc/Chuong-2-Nghien-cuu-ly-thuyet.md)
+### Tuần 04 (23/11–29/11/2026) — Đặt hàng và quản lý đơn
 
-### Ghi nhận phần Tuần 04 đã thực hiện
+Đây là khoảng thời gian kế hoạch, không phải ngày kiểm thử/commit được điền sẵn.
 
-Chặng **4A**: sinh viên đã xác nhận tạo và kiểm thử thành công các bảng `DonHang`, `ChiTietDonHang`. Giữ nguyên model, cấu hình và migration đã áp dụng. Tạm dừng triển khai thêm 4B để hoàn thiện phần còn thiếu của Tuần 03; không ghi toàn bộ Tuần 04 đã hoàn thành.
+| Chặng | Phạm vi | Trạng thái lúc chuẩn bị 4E |
+|---|---|---|
+| 4A | `DonHang`, `ChiTietDonHang`, cấu hình EF và migration | Hoàn thành theo xác nhận của sinh viên |
+| 4B | Nhập thông tin người nhận, đọc giỏ hiện tại, xem lại đơn | Hoàn thành theo xác nhận của sinh viên |
+| 4C | Xác nhận; lưu đơn/chi tiết; trừ tồn; xóa dòng giỏ đã mua trong cùng transaction; chống gửi trùng | Hoàn thành theo xác nhận của sinh viên |
+| 4D | Danh sách/chi tiết Admin; cập nhật trạng thái; hủy trước giao và hoàn tồn; lịch sử khách; nhật ký | Hoàn thành theo xác nhận của sinh viên |
+| 4E | Kiểm thử tích hợp, đối chiếu SQL, bằng chứng, Chương 3, báo cáo và README | Đang nghiệm thu; kết quả thực tế chưa được điền trong gói tài liệu |
 
-## 5. Môi trường và hướng dẫn chạy
+**Không xem bảng này là bằng chứng đã chạy thử tự động.** Khi 4E đạt, cập nhật dòng tiến độ đầu file và hàng 4E thành “Hoàn thành — đã kiểm thử và cập nhật tài liệu”; ghi ngày thực tế và liên kết kết quả vào báo cáo. Không cần tạo README mới.
 
-### Yêu cầu
+Tài liệu: [Báo cáo Tuần 04](progress-report/Tuan-04.md) · [Biên bản nghiệm thu](progress-report/kiem-thu/Tuan-04-Nghiem-thu.md) · [Chương 3](thesis/doc/Chuong-3-Phan-tich-va-thiet-ke-he-thong.md) · [Kịch bản demo](progress-report/Kich-ban-demo-Tuan-04.md).
 
-- Windows có cài đặt **.NET SDK 8**.
-- SQL Server Express với instance đang sử dụng: **`.\SQLEXPRESS`**.
-- Database hiện có: **`MachKitDb`**.
-- Cấu hình kết nối cơ sở dữ liệu của project phải trỏ đến instance và database trên.
-- Đối với chức năng quản trị, tài khoản và vai trò Identity phải có trong database hiện tại.
+## 5. Quy tắc đơn hàng và tồn kho đang áp dụng
 
-> **Không tạo lại project, không xóa/tạo lại database và không chạy lại migration khởi tạo** nếu hệ thống đang hoạt động bình thường. Không đưa mật khẩu, User Secrets hay chuỗi kết nối có thông tin bí mật lên GitHub.
+`Giỏ → Nhập người nhận → Xem lại → Xác nhận → Đơn chờ xác nhận → Admin xử lý`.
 
-### Chạy bằng PowerShell / Terminal của VS Code
+| Trạng thái hiện tại | Được chuyển tới | Thay đổi tồn khi xử lý ở 4D |
+|---|---|---|
+| `ChoXacNhan` | `DaXacNhan` hoặc `DaHuy` | Duyệt: không đổi; hủy: hoàn một lần |
+| `DaXacNhan` | `DangGiao` hoặc `DaHuy` | Giao: không đổi; hủy: hoàn một lần |
+| `DangGiao` | `HoanThanh` | Không đổi |
+| `HoanThanh` | Không chuyển tiếp | Không đổi |
+| `DaHuy` | Không chuyển tiếp | Không đổi |
 
-Mở Terminal tại **thư mục gốc repository**, sau đó chạy:
+- Tồn đã trừ tại lúc tạo đơn thành công ở 4C. Duyệt/giao/hoàn thành không trừ thêm.
+- Hủy trước giao cần lý do 5–500 ký tự. Hoàn tồn, đổi trạng thái và ghi nhật ký nằm trong một giao dịch. Không khôi phục giỏ, không xóa đơn hoặc đặt tổng tiền về 0.
+- `MaYeuCau` nhận diện lần đặt; `MaThaoTac` nhận diện lần cập nhật trạng thái. Hai mã có mục đích khác nhau.
+- Phiếu xem lại được bảo vệ, mặc định hạn 20 phút; khi xác nhận vẫn đọc lại tài khoản, giỏ, giá, trạng thái bán và tồn tại SQL Server. Phiếu thành công gửi lại tra đơn đã lưu trước khi xét hạn.
+- Chi tiết đơn giữ mã/tên/giá tại thời điểm mua. Mã hiển thị `MK-` cộng Id định dạng ít nhất 6 chữ số, không phải cột mã đơn riêng.
+- Khách chỉ xem đơn của mình. Chỉ `Admin`/`NhanVien` xử lý đơn. Ghi chú nội bộ và tài khoản nhân viên không được nạp vào nhật ký phía khách.
+- `TongTien` hiện là tiền hàng, chưa gồm phí giao. Trạng thái đơn không phải xác nhận thanh toán.
+
+## 6. Môi trường và cách chạy
+
+Giữ project `MachKit`, .NET SDK 8 theo `global.json`, SQL Server `.\SQLEXPRESS` và database `MachKitDb`. Dùng VS Code, SSMS và GitHub Desktop như hiện tại.
+
+Từ gốc repository:
 
 ```powershell
 cd src/MachKit
 dir *.csproj
 dotnet --version
 dotnet build
+dotnet ef migrations list
 dotnet run --launch-profile http
 ```
 
-Kết quả mong đợi:
+Dùng URL trong `Now listening on`, thường `http://localhost:5178`. Dừng bằng `Ctrl + C` trước khi build lại. Mật khẩu Admin ở User Secrets, không ghi vào tài liệu/mã nguồn. Không tạo lại database, Identity, project hoặc nâng framework để làm 4E.
 
-- Có file `MachKit.csproj`.
-- SDK phù hợp với `global.json` (nhánh .NET 8).
-- `dotnet build` thông báo `Build succeeded`.
-- Ứng dụng chạy tại địa chỉ được Terminal hiển thị, thường là **http://localhost:5178**.
-
-Nhấn `Ctrl + C` để dừng website trước khi build lại nếu tiến trình còn đang chạy.
-
-### Các đường dẫn chính
+4E không thay model và không cần migration mới. Đối chiếu các migration đã có từ 3C/4A/4C/4D với database. Nếu còn pending, kiểm tra đúng kết nối và migration cũ trước; không tạo `Tuan04_4E` rỗng hoặc xóa migrations. Không giả định thứ tự dựa vào tên tuần: 4A từng được làm trước phần bổ sung giỏ Tuần 03.
 
 | Đường dẫn | Chức năng |
 |---|---|
-| `/` | Trang chủ, giới thiệu và dự toán bộ thực hành |
-| `/LinhKien` | Danh sách linh kiện dành cho khách, tìm kiếm/lọc/sắp xếp/phân trang |
-| `/LinhKien/ChiTiet/{slug}` | Chi tiết linh kiện (sau khi áp dụng Chặng 3B) |
-| `/GioHang` | Giỏ hàng theo tài khoản (sau khi áp dụng và migration Chặng 3C) |
-| `/Admin` | Khu vực quản trị (yêu cầu quyền phù hợp) |
-| `/Admin/LinhKien` | Quản lý linh kiện, ảnh và trạng thái kinh doanh |
+| `/` | Trang chủ và dự toán bộ thực hành |
+| `/LinhKien` | Danh sách, tìm kiếm, lọc, sắp xếp, phân trang |
+| `/LinhKien/ChiTiet/{slug}` | Chi tiết, datasheet, thông số, sản phẩm liên quan |
+| `/GioHang` | Giỏ theo tài khoản |
+| `/DatHang` | Biểu mẫu người nhận; xem lại rồi xác nhận qua form |
+| `/DatHang/ThanhCong/{id}` | Kết quả đơn của chủ tài khoản |
+| `/DonHangCuaToi` | Danh sách đơn cá nhân |
+| `/DonHangCuaToi/ChiTiet/{id}` | Chi tiết và lịch sử đơn cá nhân |
+| `/Admin` | Khu quản trị |
+| `/Admin/LinhKien` | Quản lý linh kiện và ảnh |
+| `/Admin/DonHang` | Tìm kiếm/lọc/phân trang đơn cho Admin/Nhân viên |
+| `/Admin/DonHang/ChiTiet/{id}` | Xem và xử lý đơn |
 
-## 6. Cấu trúc mã nguồn và tài liệu
+Không gõ trực tiếp URL của action POST để thử chức năng; dùng biểu mẫu hiện có.
+
+## 7. Cấu trúc chính
 
 ```text
 ASPNET-DK25TTC5-VuDucHuy-machkit/
-├── README.md                     # README duy nhất của toàn bộ dự án
+├── README.md                       # Một README chính
 ├── global.json
-├── setup/                        # Tài liệu, script hỗ trợ cài đặt
 ├── progress-report/
-│   ├── Tuan-01.md
-│   ├── Tuan-02.md
-│   └── Tuan-03.md               # Báo cáo Tuần 03 khi được đồng bộ
-├── thesis/
-│   ├── doc/                     # Nội dung các chương đồ án
-│   ├── pdf/
-│   ├── abs/
-│   └── refs/
-└── src/
-    └── MachKit/
-        ├── Areas/Admin/           # Giao diện và controller quản trị
-        ├── Controllers/           # Controller phía khách
-        ├── Data/                  # DbContext, seed dữ liệu
-        ├── Models/                # Model nghiệp vụ
-        ├── Services/              # Xử lý nghiệp vụ giỏ hàng
-        ├── ViewModels/            # ViewModel giao diện
-        ├── Views/                 # Razor Views
-        └── wwwroot/
-            ├── css/
-            ├── images/
-            └── uploads/           # Ảnh linh kiện đã upload
+│   ├── Tuan-01.md … Tuan-04.md
+│   ├── Kich-ban-demo-Tuan-04.md
+│   └── kiem-thu/Tuan-04-Nghiem-thu.md
+├── thesis/doc/
+│   ├── Chuong-1-Tong-quan.md
+│   ├── Chuong-2-Nghien-cuu-ly-thuyet.md
+│   └── Chuong-3-Phan-tich-va-thiet-ke-he-thong.md
+├── setup/
+│   ├── Kiem-tra-Tuan-04.sql
+│   └── Huong-dan-chot-Tuan-04.md
+└── src/MachKit/
+    ├── Areas/Admin/
+    ├── Controllers/
+    ├── Data/Configurations/
+    ├── Models/
+    ├── Migrations/
+    ├── Services/                   # GioHangService, DatHangService, DonHangQuanLyService
+    ├── ViewModels/
+    ├── Views/
+    └── wwwroot/                   # css, images, uploads
 ```
 
-Cây thư mục thể hiện cấu trúc dự án và vị trí tài liệu Tuần 03 cần đồng bộ. Một số file mới có thể chỉ đang tồn tại trên máy phát triển nếu chưa được Push lên GitHub.
+Bảng nghiệp vụ chính: `DanhMuc`, `ThuongHieu`, `LinhKien`, `ThongSoKyThuat`, `BoThucHanh`, `ThanhPhanBo`, `GioHangItem`, `DonHang`, `ChiTietDonHang`, `LichSuTrangThaiDonHang`. Identity và `__EFMigrationsHistory` được giữ nguyên.
 
-## 7. Kiểm thử chức năng
+## 8. Nghiệm thu và giới hạn
 
-Các tình huống cần duy trì khi kiểm tra trên môi trường phát triển:
+Theo [hướng dẫn chốt Tuần 04](setup/Huong-dan-chot-Tuan-04.md), thực hiện hai luồng end-to-end: đơn giao thành công và đơn hủy trước giao. Đối chiếu tồn trước/sau, kiểm tra không gửi trùng, quyền khách/Admin, luồng cạnh tranh tồn và các chức năng Tuần 03. Các kết quả sâu ở 4C/4D được tái sử dụng nếu có bằng chứng và vẫn đúng phiên bản đang nghiệm thu; không cần gây lỗi lại tùy tiện.
 
-| Nhóm chức năng | Tình huống kiểm tra | Kết quả mong đợi |
-|---|---|---|
-| Trang chủ | Mở `/` | Giao diện, banner và form dự toán hoạt động |
-| Dự toán | 3 hoặc 4 bộ với tồn kho mẫu ban đầu | Tính đúng số lượng, tiền và phần thiếu theo dữ liệu mẫu |
-| Đăng nhập | Admin đăng nhập | Vào được khu vực quản trị |
-| Phân quyền | Khách không có quyền truy cập `/Admin` | Bị từ chối hoặc chuyển sang đăng nhập |
-| Quản lý linh kiện | Thêm/sửa một sản phẩm và upload ảnh | Dữ liệu và ảnh được lưu đúng |
-| Danh sách | Mở `/LinhKien` | Hiện linh kiện đang bán từ database |
-| Tìm kiếm | Nhập `LED` hoặc `LK0004` | Trả về linh kiện phù hợp nếu dữ liệu tồn tại |
-| Bộ lọc | Lọc theo danh mục, thương hiệu, giá | Chỉ hiện sản phẩm thỏa điều kiện |
-| Sắp xếp | Giá tăng/giảm hoặc tên | Đúng thứ tự được chọn |
-| Phân trang | Chuyển trang khi có đủ sản phẩm | Giữ lại bộ lọc và từ khóa |
-| Chi tiết | Mở một sản phẩm theo slug | Hiện đúng thông tin linh kiện |
-| Giỏ hàng | Thêm số lượng vượt tồn | Bị chặn và hiển thị thông báo phù hợp |
+[SQL chỉ đọc](setup/Kiem-tra-Tuan-04.sql) kiểm tra schema, dữ liệu và dấu hiệu bất thường. Không có dòng bất thường không chứng minh đã kiểm thử cạnh tranh, rollback, phân quyền hay mất kết nối quanh commit. Bảng rỗng không phải bằng chứng chức năng thành công.
 
-**Lưu ý:** Đây là danh sách tiêu chí kiểm thử, không phải kết quả kiểm thử tự động. Cần lưu kết quả kiểm thử thực tế trong báo cáo tiến độ trước khi nghiệm thu.
+Phạm vi còn ngoài bản đến hết Tuần 04: thanh toán/hoàn tiền trực tuyến, phí vận chuyển, tự hủy phía khách, trả hàng sau giao, mở lại hoặc xóa đơn, mã vận đơn, email tự động, triển khai nhiều máy. Chưa kết nối dự toán bộ thực hành với một luồng “mua cả bộ” mới; không tự ghi đã có chức năng đó.
 
-## 8. Các vấn đề đã gặp và cách xử lý
+Đơn cũ thiếu `MaYeuCau` chỉ xem; không tự gán GUID để mở hủy. Nhật ký chỉ có từ khi dùng 4D, không tạo lịch sử quá khứ giả. Cơ chế hiện tại không ngăn người có quyền SQL trực tiếp sửa dữ liệu, và chưa sửa nguy cơ ghi đè tồn từ biểu mẫu Admin cũ. Chưa tuyên bố sẵn sàng vận hành thật hoặc kiểm định bảo mật toàn diện.
 
-- **MSB1003:** Terminal chưa ở thư mục chứa `MachKit.csproj`; chuyển đến `src/MachKit`.
-- **Không nhận diện lệnh `dotnet`:** Kiểm tra câu lệnh chính xác là `dotnet`, không có ký tự `\` ở đầu; nếu vẫn lỗi, kiểm tra SDK/PATH.
-- **Khác phiên bản SDK:** Sử dụng .NET SDK 8 theo `global.json` để tránh lỗi môi trường trước đây.
-- **File `MachKit.exe` bị khóa:** Dừng website bằng `Ctrl + C` trước khi build.
-- **Đăng nhập Admin:** Đã điều chỉnh seed Identity; cấu hình mật khẩu trong User Secrets, không ghi vào repository.
-- **Không lưu được Danh mục:** Tự sinh `Slug` từ tên danh mục và xử lý ModelState.
-- **Ảnh LED xanh trên trang chủ hiển thị nhầm ảnh LED đỏ:** Nguyên nhân là logic chọn ảnh theo từ khóa `LED`; hướng xử lý là ưu tiên `HinhAnh` của từng linh kiện từ database, chỉ dùng ảnh mẫu khi chưa có ảnh upload. Cần kiểm tra lại ảnh trên trang chủ sau khi áp dụng thay đổi.
+## 9. Các vấn đề đã gặp
 
-## 9. Quy tắc quản lý GitHub
+| Vấn đề | Cách xử lý đã hướng dẫn |
+|---|---|
+| `MSB1003` | Đứng tại `src/MachKit`, nơi có `MachKit.csproj` |
+| Lệnh `\dotnet` | Bỏ ký tự `\` trước lệnh; kiểm tra SDK/PATH khi cần |
+| Không tìm thấy `git` trong Terminal | Tiếp tục dùng GitHub Desktop; không tạo lại repository |
+| `MachKit.exe` bị khóa | Dừng tiến trình web trước khi build |
+| `Slug` bắt buộc nhưng form không gửi | Tự sinh slug và điều chỉnh ModelState như bản CRUD hiện có |
+| Hai LED dùng cùng ảnh trang chủ | Ưu tiên `HinhAnh` từng linh kiện, chỉ dùng ảnh mặc định khi thiếu |
+| Lỗi Bước 6 của 4A | Đưa cấu hình đơn vào trong `OnModelCreating`, sửa dấu `}` đóng quá sớm |
+| Nhầm 11 bước 3A với cả Tuần 03 | Đã bổ sung 3B–3D rồi mới tiếp tục 4B |
+| Tab xác nhận/trạng thái đã cũ | Đọc thông báo, xem lại dữ liệu; không bỏ validation/transaction để chạy được |
 
-- Duy trì **một repository** và **một file `README.md` tại thư mục gốc**.
-- Không sử dụng `README_Tuan_02.md`, `README_Tuan_03.md` hay các README tuần khác; nội dung tiến độ được tổng hợp vào file này.
-- Mỗi tuần có thể có **báo cáo riêng** trong `progress-report/Tuan-0N.md` (đây là báo cáo, không phải README).
-- Commit theo chức năng hoặc chặng, sau khi chạy thử; Push lên repository hiện có.
-- Không tạo commit giả, không đưa mật khẩu, API key hoặc dữ liệu nhạy cảm lên GitHub.
+## 10. GitHub và chốt mốc
 
-**Đề xuất commit cập nhật tài liệu:**
+Chỉ một repository và một `README.md` chính tại gốc. Báo cáo tuần trong `progress-report/` không phải README. Nếu còn `README_Tuan_02.md` hoặc bản tuần tương tự do dự án tạo, chỉ xóa sau khi đã đối chiếu/hợp nhất; không xóa README của thư viện.
+
+Commit từng mốc đã kiểm thử, không sửa ngày, không điền hash giả. Commit 4E dự kiến:
 
 ```text
-Tuần 03: Cập nhật báo cáo tiến độ và Chương 2
+Tuần 04: Hoàn thiện kiểm thử, báo cáo và README
 ```
-
-## 10. Trạng thái cập nhật
-
-**Ngày rà soát:** 23/11/2026. Bản này sửa việc nhầm lẫn 11 bước Chặng 3A với toàn bộ Tuần 03. Các kết quả 3B–3D chỉ được xác nhận sau khi chạy thử/rà soát trên máy sinh viên. Không thay thế bằng suy đoán từ nội dung README.
-
-Chỉ giữ file `README.md` ở thư mục gốc. Nếu còn `README_Tuan_02.md`, đối chiếu và sao lưu ngoài repository rồi xóa bản trùng sau khi các nội dung cần thiết đã được hợp nhất. Không xóa README của các thư viện phụ thuộc.
+**Ngày biên soạn bản tài liệu này:** 23/11/2026. **Trạng thái cuối Tuần 04:** chờ ghi kết quả 4E thực tế vào báo cáo và bảng nghiệm thu.
