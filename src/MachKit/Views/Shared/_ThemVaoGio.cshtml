@@ -1,0 +1,31 @@
+﻿@model MachKit.Models.LinhKien
+@{
+    string? quayLai = Url.Action("Index", "LinhKienChiTiet", new { area = "", slug = Model.Slug });
+}
+<div class="mt-4">
+    @if (Model.NgungBan || Model.SoLuongTon <= 0)
+    {
+        <button type="button" class="btn btn-secondary" disabled>Hiện chưa thể thêm vào giỏ</button>
+    }
+    else if (User.Identity?.IsAuthenticated == true)
+    {
+        <form asp-area="" asp-controller="GioHang" asp-action="Them" method="post" asp-antiforgery="true">
+            <input type="hidden" name="linhKienId" value="@Model.Id" />
+            <div class="d-flex gap-2 align-items-end flex-wrap">
+                <div>
+                    <label for="soLuongThem" class="form-label">Số lượng</label>
+                    <input id="soLuongThem" name="soLuong" type="number" value="1"
+                           min="1" max="@Model.SoLuongTon" step="1" required
+                           class="form-control mk-t3-quantity" />
+                </div>
+                <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
+            </div>
+        </form>
+    }
+    else
+    {
+        <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@quayLai"
+           class="btn btn-success">Đăng nhập để thêm vào giỏ</a>
+        <p class="small text-muted mt-2 mb-0">Đăng nhập xong, chọn số lượng và bấm Thêm vào giỏ hàng.</p>
+    }
+</div>

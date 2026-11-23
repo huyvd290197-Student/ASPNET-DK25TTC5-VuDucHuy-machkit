@@ -252,6 +252,47 @@ namespace MachKit.Migrations
                     b.ToTable("DonHang", (string)null);
                 });
 
+            modelBuilder.Entity("MachKit.Models.GioHangItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CapNhatUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LinhKienId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NguoiDungId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("SoLuong")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LinhKienId");
+
+                    b.HasIndex("NguoiDungId", "LinhKienId")
+                        .IsUnique();
+
+                    b.ToTable("GioHangItem", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_GioHangItem_SoLuong", "[SoLuong] > 0");
+                        });
+                });
+
             modelBuilder.Entity("MachKit.Models.LinhKien", b =>
                 {
                     b.Property<int>("Id")
@@ -565,6 +606,25 @@ namespace MachKit.Migrations
                         .HasForeignKey("NguoiDungId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("NguoiDung");
+                });
+
+            modelBuilder.Entity("MachKit.Models.GioHangItem", b =>
+                {
+                    b.HasOne("MachKit.Models.LinhKien", "LinhKien")
+                        .WithMany()
+                        .HasForeignKey("LinhKienId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MachKit.Models.ApplicationUser", "NguoiDung")
+                        .WithMany()
+                        .HasForeignKey("NguoiDungId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LinhKien");
 
                     b.Navigation("NguoiDung");
                 });

@@ -21,7 +21,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-
+builder.Services.AddScoped<MachKit.Services.GioHangService>();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

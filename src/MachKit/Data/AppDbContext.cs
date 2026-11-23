@@ -17,7 +17,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<BoThucHanh> BoThucHanhs => Set<BoThucHanh>();
     public DbSet<ThanhPhanBo> ThanhPhanBos => Set<ThanhPhanBo>();
 
-    
+    public DbSet<GioHangItem> GioHangItems => Set<GioHangItem>();
     public DbSet<DonHang> DonHangs => Set<DonHang>();
     public DbSet<ChiTietDonHang> ChiTietDonHangs => Set<ChiTietDonHang>();
 
@@ -25,7 +25,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(b);
 
-        
+        b.ApplyConfiguration(new MachKit.Data.Configurations.GioHangItemConfiguration());
         b.Entity<DanhMuc>().ToTable("DanhMuc");
         b.Entity<ThuongHieu>().ToTable("ThuongHieu");
         b.Entity<LinhKien>().ToTable("LinhKien");

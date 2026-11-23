@@ -46,7 +46,7 @@
                     <p class="text-danger fw-bold">Tạm hết hàng</p>
                 }
 
-                @* CHANG_3C_THEM_GIO: sau khi xong migration giỏ hàng, thay dòng chú thích này bằng partial theo hướng dẫn. *@
+                <partial name="_ThemVaoGio" model="Model.SanPham" />
 
                 <div class="mt-3">
                     <a asp-area="" asp-controller="LinhKien" asp-action="Index"

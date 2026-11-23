@@ -1,0 +1,115 @@
+﻿@model MachKit.ViewModels.GioHangViewModel
+@using System.Globalization
+@using MachKit.Helpers
+@{
+    ViewData["Title"] = "Giỏ hàng";
+    var vi = CultureInfo.GetCultureInfo("vi-VN");
+}
+<link rel="stylesheet" href="~/css/tuan03-cua-hang.css" asp-append-version="true" />
+<div class="container mk-t3">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <h1 class="h2 mk-t3-title mb-0">Giỏ hàng của bạn</h1>
+        <a asp-area="" asp-controller="LinhKien" asp-action="Index"
+           class="btn btn-outline-success">Tiếp tục chọn linh kiện</a>
+    </div>
+    @if (TempData["GioHangThanhCong"] is string ok)
+    {
+        <div class="alert alert-success" role="status">@ok</div>
+    }
+    @if (TempData["GioHangLoi"] is string loi)
+    {
+        <div class="alert alert-danger" role="alert">@loi</div>
+    }
+    @if (Model.Dongs.Count == 0)
+    {
+        <div class="mk-t3-panel text-center py-5">
+            <h2 class="h4">Giỏ hàng đang trống</h2>
+            <p class="text-muted">Mở chi tiết một linh kiện rồi chọn Thêm vào giỏ hàng.</p>
+            <a asp-area="" asp-controller="LinhKien" asp-action="Index" class="btn btn-success">Xem linh kiện</a>
+        </div>
+    }
+    else
+    {
+        if (Model.CoCanhBao)
+        {
+            <div class="alert alert-warning" role="alert">
+                Có mặt hàng đã hết hàng, ngừng bán hoặc không đủ tồn kho. Hãy cập nhật hoặc xóa các dòng được cảnh báo.
+            </div>
+        }
+        <div class="mk-t3-panel">
+            <div class="table-responsive">
+                <table class="table mk-t3-table">
+                    <thead><tr><th>Linh kiện</th><th>Đơn giá hiện tại</th><th>Số lượng</th>
+                        <th>Thành tiền</th><th>Thao tác</th></tr></thead>
+                    <tbody>
+                    @foreach (var item in Model.Dongs)
+                    {
+                        var anh = Tuan03HienThiHelper.AnhNoiBo(item.HinhAnh);
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    @if (anh is not null)
+                                    {
+                                        <img src="@Url.Content(anh)" alt="@item.TenLinhKien" class="mk-t3-thumb" loading="lazy"
+                                             onerror="this.onerror=null;this.style.display='none';" />
+                                    }
+                                    <div>
+                                        @if (!item.NgungBan)
+                                        {
+                                            <a asp-area="" asp-controller="LinhKienChiTiet" asp-action="Index"
+                                               asp-route-slug="@item.Slug" class="fw-bold">@item.TenLinhKien</a>
+                                        }
+                                        else
+                                        {
+                                            <strong>@item.TenLinhKien</strong>
+                                        }
+                                        <div class="small text-muted">@item.MaLinhKien · Kho: @Math.Max(0, item.TonKho)</div>
+                                        @if (item.CanhBao is not null)
+                                        {
+                                            <div class="text-danger small mt-1">@item.CanhBao</div>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-nowrap">@item.DonGia.ToString("N0", vi) đ</td>
+                            <td>
+                                @if (!item.NgungBan && item.TonKho > 0)
+                                {
+                                    <form asp-area="" asp-controller="GioHang" asp-action="CapNhat"
+                                          method="post" asp-antiforgery="true" class="d-flex gap-2">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <input type="number" name="soLuong" value="@item.SoLuong" min="1" max="@item.TonKho"
+                                               step="1" required aria-label="Số lượng @item.TenLinhKien"
+                                               class="form-control form-control-sm mk-t3-quantity" />
+                                        <button type="submit" class="btn btn-sm btn-outline-success">Cập nhật</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span>@item.SoLuong</span>
+                                }
+                            </td>
+                            <td class="text-nowrap fw-bold">@item.ThanhTien.ToString("N0", vi) đ</td>
+                            <td>
+                                <form asp-area="" asp-controller="GioHang" asp-action="Xoa" method="post" asp-antiforgery="true">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            aria-label="Xóa @item.TenLinhKien khỏi giỏ">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-end mt-3">
+                <div class="text-muted">Tạm tính theo giá hiện tại của các dòng trong giỏ</div>
+                <div class="mk-t3-price">@Model.TongTien.ToString("N0", vi) đ</div>
+            </div>
+            <p class="text-muted small mt-3 mb-0">
+                Giỏ hàng được lưu theo tài khoản. Thêm vào giỏ chưa tạo đơn, chưa thanh toán
+                và chưa giữ/trừ hàng trong kho. Tạm tính chưa bao gồm phí giao hàng.
+            </p>
+        </div>
+    }
+</div>
