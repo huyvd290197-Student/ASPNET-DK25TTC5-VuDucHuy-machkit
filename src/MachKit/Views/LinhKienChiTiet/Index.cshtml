@@ -1,0 +1,138 @@
+﻿@model MachKit.ViewModels.LinhKienChiTietViewModel
+@using System.Globalization
+@using MachKit.Helpers
+@{
+    var sp = Model.SanPham;
+    ViewData["Title"] = sp.TenLinhKien;
+    var vi = CultureInfo.GetCultureInfo("vi-VN");
+    var anh = Tuan03HienThiHelper.AnhNoiBo(sp.HinhAnh);
+}
+<link rel="stylesheet" href="~/css/tuan03-cua-hang.css" asp-append-version="true" />
+
+<div class="container mk-t3">
+    <nav aria-label="Đường dẫn" class="mb-4">
+        <a asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
+        <span aria-hidden="true"> / </span>
+        <a asp-area="" asp-controller="LinhKien" asp-action="Index">Linh kiện</a>
+        <span aria-hidden="true"> / </span><span>@sp.TenLinhKien</span>
+    </nav>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="mk-t3-photo">
+                <span class="mk-t3-muted">Chưa có ảnh linh kiện</span>
+                @if (anh is not null)
+                {
+                    <img src="@Url.Content(anh)" alt="@sp.TenLinhKien"
+                         onerror="this.onerror=null;this.style.display='none';" />
+                }
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="mk-t3-panel h-100">
+                <div class="text-muted mb-2">Mã: @sp.MaLinhKien</div>
+                <h1 class="h2 mk-t3-title">@sp.TenLinhKien</h1>
+                <p class="mk-t3-muted">
+                    Danh mục: @(sp.DanhMuc?.TenDanhMuc ?? "Chưa phân loại")<br />
+                    Thương hiệu: @(sp.ThuongHieu?.TenThuongHieu ?? "Chưa cập nhật")
+                </p>
+                <p class="mk-t3-price">@sp.Gia.ToString("N0", vi) đ</p>
+                @if (sp.SoLuongTon > 0)
+                {
+                    <p class="text-success fw-bold">Còn @sp.SoLuongTon linh kiện</p>
+                }
+                else
+                {
+                    <p class="text-danger fw-bold">Tạm hết hàng</p>
+                }
+
+                @* CHANG_3C_THEM_GIO: sau khi xong migration giỏ hàng, thay dòng chú thích này bằng partial theo hướng dẫn. *@
+
+                <div class="mt-3">
+                    <a asp-area="" asp-controller="LinhKien" asp-action="Index"
+                       class="btn btn-outline-secondary">Về danh sách linh kiện</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="mk-t3-panel mt-4">
+        <h2 class="h4 mk-t3-title">Mô tả sản phẩm</h2>
+        @if (string.IsNullOrWhiteSpace(sp.MoTa))
+        {
+            <p class="mb-0 text-muted">Thông tin mô tả đang được cập nhật.</p>
+        }
+        else
+        {
+            @* Razor mã hóa nội dung: không dùng Html.Raw cho mô tả chưa được làm sạch. *@
+            <div class="mk-t3-description">@sp.MoTa</div>
+        }
+    </section>
+
+    <section class="mk-t3-panel mt-4">
+        <h2 class="h4 mk-t3-title">Thông số kỹ thuật</h2>
+        @if (sp.ThongSos.Count == 0)
+        {
+            <p class="text-muted">Chưa có thông số kỹ thuật cho linh kiện này.</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead><tr><th>Thông số</th><th>Giá trị</th><th>Đơn vị</th></tr></thead>
+                    <tbody>
+                    @foreach (var ts in sp.ThongSos.OrderBy(x => x.Id))
+                    {
+                        <tr><th scope="row">@ts.TenThongSo</th><td>@ts.GiaTri</td><td>@ts.DonVi</td></tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+        <h3 class="h5 mt-4">Tài liệu datasheet</h3>
+        @if (Model.DatasheetHttpUrl is not null)
+        {
+            <a href="@Model.DatasheetHttpUrl" target="_blank" rel="noopener noreferrer"
+               class="btn btn-outline-success">Mở datasheet trong tab mới</a>
+        }
+        else
+        {
+            <p class="text-muted mb-0">Chưa có liên kết datasheet HTTP/HTTPS hợp lệ.</p>
+        }
+    </section>
+
+    <section class="mt-4">
+        <h2 class="h4 mk-t3-title mb-3">Linh kiện liên quan</h2>
+        @if (Model.SanPhamLienQuan.Count == 0)
+        {
+            <p class="text-muted">Chưa có linh kiện đang bán khác trong cùng danh mục.</p>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
+            @foreach (var item in Model.SanPhamLienQuan)
+            {
+                var anhLienQuan = Tuan03HienThiHelper.AnhNoiBo(item.HinhAnh);
+                <div class="col">
+                    <article class="mk-t3-panel h-100">
+                        <div class="mk-t3-photo mk-t3-photo-small mb-3">
+                            <span class="text-muted small">Chưa có ảnh</span>
+                            @if (anhLienQuan is not null)
+                            {
+                                <img src="@Url.Content(anhLienQuan)" alt="@item.TenLinhKien" loading="lazy"
+                                     onerror="this.onerror=null;this.style.display='none';" />
+                            }
+                        </div>
+                        <h3 class="h6">
+                            <a asp-area="" asp-controller="LinhKienChiTiet" asp-action="Index"
+                               asp-route-slug="@item.Slug">@item.TenLinhKien</a>
+                        </h3>
+                        <p class="fw-bold mb-1">@item.Gia.ToString("N0", vi) đ</p>
+                        <p class="small text-muted mb-0">Còn @Math.Max(0, item.SoLuongTon)</p>
+                    </article>
+                </div>
+            }
+            </div>
+        }
+    </section>
+</div>

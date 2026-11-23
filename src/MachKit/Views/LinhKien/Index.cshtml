@@ -181,7 +181,15 @@
                                     </div>
                                     <div class="mk3-card-body">
                                         <span class="mk3-code">@item.MaLinhKien</span>
-                                        <h3 class="mk3-name">@item.TenLinhKien</h3>
+                                        <h3 class="mk3-name">
+                                            <a asp-area=""
+                                            asp-controller="LinhKienChiTiet"
+                                            asp-action="Index"
+                                            asp-route-slug="@item.Slug"
+                                            class="text-reset text-decoration-none">
+                                                @item.TenLinhKien
+                                            </a>
+                                        </h3>
                                         <div class="mk3-meta mb-2">
                                             <div><i class="bi bi-grid me-1"></i>@(item.DanhMuc?.TenDanhMuc ?? "Chưa phân loại")</div>
                                             <div><i class="bi bi-tag me-1"></i>@(item.ThuongHieu?.TenThuongHieu ?? "Chưa có thương hiệu")</div>
