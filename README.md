@@ -1,7 +1,7 @@
 # MạchKit – Website bán linh kiện điện tử theo bộ thực hành
 
 > **Đề tài:** Xây dựng website bán linh kiện điện tử hỗ trợ mua theo bộ thực hành  
-> **Tiến độ cập nhật:** Tuần 03 (16/11–22/11/2026)  
+> **Tiến độ cập nhật:** Đang bổ sung Chặng 3B–3D của Tuần 03; bảo toàn Chặng 4A đã hoàn thành  
 > **Hạn hoàn thành đồ án:** 15/12/2026
 
 ## 1. Thông tin sinh viên
@@ -74,37 +74,26 @@ Repository có `global.json` để cố định phiên bản .NET SDK phù hợp
 
 [Báo cáo tiến độ Tuần 02](progress-report/Tuan-02.md)
 
-### Tuần 03 (16/11–22/11/2026) – Trang khách hàng và hoàn thiện chức năng mua sắm
+### Tuần 03 (16/11–22/11/2026) – Hoàn thiện trang khách hàng và giỏ hàng
 
-**Trạng thái ghi nhận:** Người thực hiện xác nhận đã hoàn thành **11 bước của Tuần 03** trên môi trường phát triển. Các mục dưới đây phản ánh kế hoạch 11 bước đã được báo hoàn thành; việc đồng bộ và đối chiếu từng chức năng với nhánh `main` trên GitHub được thực hiện khi Push các commit Tuần 03.
+**Đính chính ngày 23/11/2026:** 11 bước đã hoàn thành là **11 bước của Chặng 3A**, không phải toàn bộ Tuần 03. Các chặng 3B–3D được bổ sung sau khi rà soát. Không xem tài liệu này là bằng chứng kiểm thử tự động.
 
-1. Xây dựng trang **danh sách linh kiện dành cho khách hàng**.
-2. Hiển thị dữ liệu linh kiện lấy từ **SQL Server**.
-3. Tìm kiếm linh kiện theo **tên hoặc mã**.
-4. Lọc linh kiện theo **danh mục và thương hiệu**.
-5. Lọc theo **khoảng giá**.
-6. **Sắp xếp và phân trang**, giữ điều kiện tìm kiếm/lọc khi chuyển trang.
-7. Xây dựng trang **chi tiết linh kiện theo slug**.
-8. Trình bày **ảnh, giá, tồn kho, mô tả, thông số kỹ thuật** và các thông tin liên quan của linh kiện.
-9. Bắt đầu xây dựng **chức năng giỏ hàng**.
-10. Kiểm tra **số lượng thêm vào giỏ không vượt quá tồn kho**.
-11. Cập nhật **báo cáo tiến độ Tuần 03** và **Chương 2 – Nghiên cứu lý thuyết**.
+| Chặng | Phạm vi | Trạng thái lúc cập nhật |
+|---|---|---|
+| 3A | Danh sách từ SQL Server; tìm tên/mã; lọc danh mục, thương hiệu, giá; sắp xếp và phân trang | Đã hoàn thành theo xác nhận của sinh viên |
+| 3B | Chi tiết theo slug; ảnh, giá, tồn, mô tả, thông số, datasheet, sản phẩm liên quan | Có mã bổ sung; chờ áp dụng và kiểm thử |
+| 3C | Giỏ hàng SQL Server theo tài khoản; thêm/cập nhật/xóa; chặn vượt tồn | Có mã bổ sung; chờ migration và kiểm thử |
+| 3D | Chương 2, báo cáo Tuần 03 và README duy nhất | Có bản nháp; chờ rà soát và Push |
 
-**Chặng 3A – Danh sách linh kiện:** Trang khách hàng được triển khai độc lập với Area Admin. Các file chính ở môi trường phát triển gồm:
+Chỉ đổi trạng thái 3B/3C/3D thành **Hoàn thành – đã kiểm thử/đã rà soát** sau khi thực hiện đúng các bước tương ứng. Ghi kết quả thực tế vào [báo cáo Tuần 03](progress-report/Tuan-03.md).
 
-```text
-src/MachKit/Controllers/LinhKienController.cs
-src/MachKit/ViewModels/LinhKienDanhSachViewModel.cs
-src/MachKit/Views/LinhKien/Index.cshtml
-```
+Phần bổ sung dùng `LinhKienChiTietController` cho chi tiết và `GioHangService` cho xử lý giỏ. Bảng `GioHangItem` lưu một dòng cho mỗi cặp tài khoản – linh kiện. Tổng tiền trong giỏ tính từ giá hiện tại trong database; giỏ chưa giữ/trừ tồn và chưa tạo đơn hàng.
 
-Trang danh sách chỉ hiển thị linh kiện **đang bán**; tìm kiếm, lọc, sắp xếp và phân trang được thực hiện qua truy vấn Entity Framework Core.
+[Bản nháp Chương 2 – Nghiên cứu lý thuyết](thesis/doc/Chuong-2-Nghien-cuu-ly-thuyet.md)
 
-**Chặng 3B – Chi tiết linh kiện:** Tìm sản phẩm theo slug; trình bày thông tin chi tiết, thông số kỹ thuật và tài liệu datasheet (nếu có).
+### Ghi nhận phần Tuần 04 đã thực hiện
 
-**Chặng 3C – Giỏ hàng:** Triển khai các thao tác giỏ hàng theo phạm vi đã làm, đặc biệt là kiểm tra số lượng yêu cầu với tồn kho. Việc lưu giỏ hàng vào database và yêu cầu đăng nhập cần được đối chiếu với mã nguồn/migration thực tế trước khi nghiệm thu cuối cùng.
-
-**Chặng 3D – Tài liệu:** Báo cáo tiến độ Tuần 03 đặt tại `progress-report/Tuan-03.md`; nội dung Chương 2 trình bày cơ sở lý thuyết ASP.NET Core MVC, Entity Framework Core, SQL Server, Identity, Bootstrap và bảo mật website. Chỉ tạo/cập nhật các tài liệu này nếu chưa có; **không tạo thêm README theo từng tuần**.
+Chặng **4A**: sinh viên đã xác nhận tạo và kiểm thử thành công các bảng `DonHang`, `ChiTietDonHang`. Giữ nguyên model, cấu hình và migration đã áp dụng. Tạm dừng triển khai thêm 4B để hoàn thiện phần còn thiếu của Tuần 03; không ghi toàn bộ Tuần 04 đã hoàn thành.
 
 ## 5. Môi trường và hướng dẫn chạy
 
@@ -145,6 +134,8 @@ Nhấn `Ctrl + C` để dừng website trước khi build lại nếu tiến tr�
 |---|---|
 | `/` | Trang chủ, giới thiệu và dự toán bộ thực hành |
 | `/LinhKien` | Danh sách linh kiện dành cho khách, tìm kiếm/lọc/sắp xếp/phân trang |
+| `/LinhKien/ChiTiet/{slug}` | Chi tiết linh kiện (sau khi áp dụng Chặng 3B) |
+| `/GioHang` | Giỏ hàng theo tài khoản (sau khi áp dụng và migration Chặng 3C) |
 | `/Admin` | Khu vực quản trị (yêu cầu quyền phù hợp) |
 | `/Admin/LinhKien` | Quản lý linh kiện, ảnh và trạng thái kinh doanh |
 
@@ -170,6 +161,7 @@ ASPNET-DK25TTC5-VuDucHuy-machkit/
         ├── Controllers/           # Controller phía khách
         ├── Data/                  # DbContext, seed dữ liệu
         ├── Models/                # Model nghiệp vụ
+        ├── Services/              # Xử lý nghiệp vụ giỏ hàng
         ├── ViewModels/            # ViewModel giao diện
         ├── Views/                 # Razor Views
         └── wwwroot/
@@ -210,3 +202,23 @@ Các tình huống cần duy trì khi kiểm tra trên môi trường phát tri�
 - **Đăng nhập Admin:** Đã điều chỉnh seed Identity; cấu hình mật khẩu trong User Secrets, không ghi vào repository.
 - **Không lưu được Danh mục:** Tự sinh `Slug` từ tên danh mục và xử lý ModelState.
 - **Ảnh LED xanh trên trang chủ hiển thị nhầm ảnh LED đỏ:** Nguyên nhân là logic chọn ảnh theo từ khóa `LED`; hướng xử lý là ưu tiên `HinhAnh` của từng linh kiện từ database, chỉ dùng ảnh mẫu khi chưa có ảnh upload. Cần kiểm tra lại ảnh trên trang chủ sau khi áp dụng thay đổi.
+
+## 9. Quy tắc quản lý GitHub
+
+- Duy trì **một repository** và **một file `README.md` tại thư mục gốc**.
+- Không sử dụng `README_Tuan_02.md`, `README_Tuan_03.md` hay các README tuần khác; nội dung tiến độ được tổng hợp vào file này.
+- Mỗi tuần có thể có **báo cáo riêng** trong `progress-report/Tuan-0N.md` (đây là báo cáo, không phải README).
+- Commit theo chức năng hoặc chặng, sau khi chạy thử; Push lên repository hiện có.
+- Không tạo commit giả, không đưa mật khẩu, API key hoặc dữ liệu nhạy cảm lên GitHub.
+
+**Đề xuất commit cập nhật tài liệu:**
+
+```text
+Tuần 03: Cập nhật báo cáo tiến độ và Chương 2
+```
+
+## 10. Trạng thái cập nhật
+
+**Ngày rà soát:** 23/11/2026. Bản này sửa việc nhầm lẫn 11 bước Chặng 3A với toàn bộ Tuần 03. Các kết quả 3B–3D chỉ được xác nhận sau khi chạy thử/rà soát trên máy sinh viên. Không thay thế bằng suy đoán từ nội dung README.
+
+Chỉ giữ file `README.md` ở thư mục gốc. Nếu còn `README_Tuan_02.md`, đối chiếu và sao lưu ngoài repository rồi xóa bản trùng sau khi các nội dung cần thiết đã được hợp nhất. Không xóa README của các thư viện phụ thuộc.
